@@ -1,7 +1,7 @@
 poc-sysmgmt-roles
 =================
 
-_WARNING: These roles can be dangerous to use. They are experimental, proof of concepts that may or may not reach a usable state in the future.
+_WARNING: These roles can be dangerous to use. They are experimental, proof of concepts that may or may not reach a usable state in the future._
 
 Overview
 --------
@@ -14,8 +14,6 @@ Current subsystems
 - Networking
 - Timesync
 
-
-
 Future subsystems
 -----------------
 - Storage
@@ -24,5 +22,6 @@ Future subsystems
 - Kernel crash dump
 - DNS
 - SystemLog
+- Registration
 - more...
 
