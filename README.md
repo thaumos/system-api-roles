@@ -8,6 +8,8 @@ Overview
 
 A collection of modules and supporting roles to configure common system subsystems utilizing the subsystems APIs whenever possible rather than common CLI tools.  This should allow improved performance, error handling, and consistency across future releases.
 
+Each subsystem role follow the file and directory layout best practices as described at <http://docs.ansible.com/ansible/playbooks_best_practices.html>, as well as including an `example-plbk.yml` file in the top level directory that demonstrates its usage.
+
 Current subsystems
 ------------------
 
