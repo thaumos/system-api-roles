@@ -1,0 +1,30 @@
+---
+- name: Include vars
+  include_vars: main.yml
+
+- name: Install kexec-tools
+  package: name=kexec-tools state=present
+
+- name: copy id_rsa
+  copy:
+    src: /root/.ssh/kdump_id_rsa
+    dest: "{{ ssh_private_key }}"
+    owner: root
+    group: root
+    mode: 0600
+  when: ssh_server is defined and ssh_server != ''
+
+- name: Generate /etc/kdump.conf file
+  template: src=kdump.conf.j2 dest=/etc/kdump.conf
+  notify: restart kdump
+
+- name: Generate /etc/sysconfig/kdump file
+  template: src=kdump.j2 dest=/etc/sysconfig/kdump
+  notify: restart kdump
+
+- name: Disable kdump
+  service: name=kdump state=stopped enabled=no
+
+- name: Enable kdump
+  service: name=kdump state=started enabled=yes
+

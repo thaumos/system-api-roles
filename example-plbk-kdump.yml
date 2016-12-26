@@ -1,0 +1,9 @@
+# - hosts: sshhost
+#  tasks:
+#  - authorized_key:
+#      user: root
+#      key: "{{ lookup('file', '/root/.ssh/kdump_id_rsa.pub') }}"
+
+- hosts: testhost
+  roles:
+    - Kernel-Crash-Dump

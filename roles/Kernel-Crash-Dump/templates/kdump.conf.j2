@@ -1,0 +1,12 @@
+
+{% if fs_type is defined and  fs_type != '' and  partition is defined and partition != '' %}
+{{ fs_type }} {{ partition }}
+{% elif ssh_server is defined and ssh_server != '' %}
+ssh {{ user }}@{{ ssh_server }}
+sshkey {{ ssh_private_key }}
+{% elif nfs_mount is defined and nfs_mount != '' %}
+nfs {{ nfs_mount }}
+{% endif %}
+
+path {{ dump_path|default('/var/crash')  }}
+core_collector makedumpfile -l --message-level 1 -d 31 -F
