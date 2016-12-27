@@ -1,0 +1,8 @@
+#ssh_server: 192.168.124.1
+#user: root
+
+##fs_type: ext4
+##partition: /dev/sda1
+
+dump_path: /boot
+ssh_private_key: /root/.ssh/kdump_id_rsa
