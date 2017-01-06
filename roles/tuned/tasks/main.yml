@@ -1,0 +1,62 @@
+---
+- name: Install Tuned
+  package: name=tuned state=latest
+
+- name: Enable Tuned
+  service: name=tuned state=started enabled=yes
+
+- name: Check for Tuned legacy
+  shell: tuned --version &> /dev/null || echo -n "legacy"
+  register: tversion
+
+- set_fact:
+    tuned_legacy: "{{ (tversion.stdout == 'legacy') | ternary(true,false) }}"
+
+- name: Generate tuned-main.conf file
+  template: src=tuned-main.conf.j2 dest=/etc/tuned/tuned-main.conf
+  notify: restart tuned
+  when: generate_tuned_main_conf and not tuned_legacy
+
+- name: Get Tuned recommended profile
+  shell: tuned-adm recommend 2> /dev/null || echo -n " *fail"
+  register: recommend
+
+- set_fact:
+    tuned_recommended_profile: "{{ (recommend.stdout == ' *fail') | ternary('',recommend.stdout) }}"
+
+- name: Deploy legacy Tuned profiles
+  copy:
+    src: tuned_legacy/{{ item }}
+    dest: /etc/tune-profiles
+  with_lines:
+    ls {{ deploy_tuned_profiles_srcpath }}/tuned_legacy
+  notify: restart tuned
+  when: deploy_tuned_profiles and tuned_legacy
+
+- name: Deploy Tuned profiles
+  copy:
+    src: tuned/{{ item }}
+    dest: /etc/tuned/
+  with_lines:
+    ls {{ deploy_tuned_profiles_srcpath }}/tuned
+  notify: restart tuned
+  when: deploy_tuned_profiles and not tuned_legacy
+
+- name: Get list of available Tuned profiles
+  shell: tuned-adm list | tail -n +2 | head -n -1 | cut -d' ' -f2
+  register: profiles
+
+- set_fact:
+    tuned_available_profiles: "{{ profiles.stdout_lines }}"
+
+- name: Set Tuned legacy profile {{ tuned_legacy_profile }}
+  command: tuned-adm profile {{ tuned_legacy_profile }}
+  when: tuned_legacy and tuned_legacy_profile != ""
+
+- name: Set Tuned profile {{ tuned_profile }}
+  command: tuned-adm profile {{ tuned_profile }}
+  when: not tuned_legacy and not tuned_set_recommended_profile and tuned_profile != ""
+
+- name: Set recommended Tuned profile {{ tuned_recommended_profile }}
+  command: tuned-adm profile {{ tuned_recommended_profile }}
+  when: not tuned_legacy and tuned_set_recommended_profile
