@@ -8,11 +8,11 @@ Role Variables
 --------------
 
 This role provides Postfix configuration dictionary 'postfix_conf' which can
-hold key/value pairs of all supported Postfix configuration. Keys not supported
-by the installed Postfix version are ignored.
+hold key/value pairs of all supported Postfix configuration parameters. Keys
+not supported by the installed Postfix are ignored.
 
 
-Example Playbooks
+Example Playbook
 -----------------
 
 Install and enable postfix. Configure "relay_domains=$mydestination" and
@@ -26,7 +26,7 @@ Install and enable postfix. Configure "relay_domains=$mydestination" and
       relay_domains: "$mydestination"
       relay_host: "example.com"
   roles:
-    - ansible-role-postfix
+    - postfix
 ```
 
 

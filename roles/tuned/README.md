@@ -53,7 +53,7 @@ throughput-performance profile (i.e. on Tuned legacy):
     generate_tuned_main_conf: true
     tuned_main_conf_dynamic_tuning: "1"
   roles:
-    - ansible-role-tuned
+    - tuned
 ```
 
 Install and enable Tuned. Use the default configuration (which is usually
@@ -66,7 +66,7 @@ the most similar to the balanced (if there is known map):
   vars:
     tuned_profile: balanced
   roles:
-    - ansible-role-tuned
+    - tuned
 ```
 
 Install and enable Tuned. Set powersave profile on Tuned and
@@ -81,7 +81,7 @@ on Tuned legacy by default):
     tuned_profile: powersave
     tuned_legacy_profile: desktop-powersave
   roles:
-    - ansible-role-tuned
+    - tuned
 ```
 
 Install and enable Tuned. Deploy custom Tuned profiles and activate profile
@@ -95,7 +95,7 @@ named 'myprofile1'. The Tuned profile 'myprofile1' has to be available under
     tuned_profile: myprofile1
     deploy_tuned_profiles: true
   roles:
-    - ansible-role-tuned
+    - tuned
 ```
 
 Install and enable Tuned. Deploy custom Tuned profiles with Tuned and activate
@@ -112,7 +112,7 @@ be empty:
     tuned_legacy_profile: ""
     deploy_tuned_profiles: true
   roles:
-    - ansible-role-tuned
+    - tuned
 ```
 
 
