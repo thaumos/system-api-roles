@@ -1,0 +1,61 @@
+---
+# Two non-compatible versions of Tuned exists - Tuned (RHEL-7+) and
+# Tuned legacy (RHEL-6)
+
+
+# Tuned profile configuration
+
+# Whether to auto set the Tuned profile which is recommended for the
+# machine / product. This variable is considered false if the machine has
+# Tuned legacy.
+tuned_set_recommended_profile: false
+
+# Tuned profile to set if the 'tuned_set_recommended_profile' is 'false'.
+# This is also by default used as a input of 'tuned_legacy_profile'
+# (the profile name to be set with Tuned legacy) after
+# pre-processing / compatibility mapping (see bellow). If empty string is
+# used, no profile will be set (i.e. it will keep the current profile whatever
+# it is).
+tuned_profile: throughput-performance
+
+
+# Tuned legacy profile configuration
+
+# Tuned legacy has different profile names, this variable maps Tuned profile
+# names to the most appropriate / similar Tuned legacy profile names.
+tuned_legacy_profiles_map: {"balanced": "default", "powersave": "server-powersave"}
+
+# Profile to set with Tuned legacy. By default it's 'tuned_profile' mapped
+# through the 'tuned_legacy_profiles_map'. Empty string means not to change the
+# current profile.
+tuned_legacy_profile: "{{ tuned_legacy_profiles_map[tuned_profile] | default(tuned_profile) }}"
+
+
+# Tuned / Tuned legacy custom profiles deployment
+
+# Whether to deploy custom Tuned profiles from the
+# 'deploy_tuned_profiles_srcpath'  directory. Under this directory there are
+# 'tuned' and 'tuned_legacy' subdirectories which can hold custom Tuned and
+# Tuned legacy profiles. In case of Tuned, there can be also custom Tuned
+# configuration.
+deploy_tuned_profiles: false
+
+# Base directory from which custom Tuned / Tuned legacy profiles can be
+# deployed.
+deploy_tuned_profiles_srcpath: "{{ role_path }}/files"
+
+
+# Tuned main configuration templating
+
+# Whether to template Tuned main configuration (not supported with
+# Tuned legacy)
+generate_tuned_main_conf: false
+
+# Template defaults, for description see ../templates/tuned-main.conf.j2
+
+tuned_main_conf_daemon: "1"
+tuned_main_conf_dynamic_tuning: "0"
+tuned_main_conf_sleep_interval: "1"
+tuned_main_conf_update_interval: "10"
+tuned_main_conf_recommend_command: "1"
+tuned_main_conf_reapply_sysctl: "1"

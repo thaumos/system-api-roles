@@ -1,0 +1,7 @@
+---
+# Postfix configuration dictionary, e.g.:
+# postfix_conf:
+#   relay_domains: "$mydestination"
+#   relay_host: "example.com"
+#  
+postfix_conf: {}

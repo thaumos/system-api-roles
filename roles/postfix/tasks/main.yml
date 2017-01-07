@@ -1,0 +1,12 @@
+---
+- name: Install Postfix
+  package: name=postfix state=latest
+
+- name: Enable Postfix
+  service: name=postfix state=started enabled=yes
+
+- name: Configure Postfix 
+  command: "postconf -e \"{{ item.key }}={{ item.value }}\""
+  ignore_errors: true
+  notify: restart postfix
+  with_dict: "{{ postfix_conf }}"
