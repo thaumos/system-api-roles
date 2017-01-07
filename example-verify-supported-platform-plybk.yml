@@ -1,0 +1,10 @@
+---
+# Register with subscription-manager
+
+- hosts: rhel 
+  become: yes
+  become_method: sudo
+  become_user: root
+  roles:
+    - verify_supported_platform
+

@@ -1,0 +1,16 @@
+---
+# Register with subscription-manager
+
+- hosts: rhel 
+  vars_files:
+    - vault.yml  # pull in encrypted usernames and passwords for registration.  Optional but recommended.
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    rhn_username: "{{rhn_username}}"
+    rhn_password: "{{rhn_password}}"
+    POOL_ID: "{{POOL_ID}}"
+  roles:
+    - common_RHSM
+

@@ -1,0 +1,28 @@
+# A Task Set to verify supported platform and versions
+
+- debug: 
+    msg: ansible_distribution {{ ansible_distribution }} - ansible_distribution_version {{ ansible_distribution_version }} - ansible_distribution_major_version {{ ansible_distribution_major_version }}
+    verbosity: 1
+
+- name: Verify RHEL distribution
+  fail:
+    msg: "Only RHEL 6.4+ is supported"
+  when: ansible_distribution != "RedHat"
+
+- name: Verify supported version
+  fail:
+    msg: "Only RHEL 6.4+ is supported"
+  when: ansible_distribution_major_version | version_compare('6.4', '<=')
+
+# - name: Confirm supported platform
+#   debug:
+#     msg: "Supported platform detected"
+#     verbosity: 1
+#   when: (ansible_distribution == "RedHat" and ansible_distribution_major_version | version_compare('6.4', '>=') )
+
+# "ansible_distribution": "RedHat",
+# "ansible_distribution_release": "Maipo",
+# "ansible_distribution_version": "7.2"
+# ansible_distribution_major_version == "6"
+# ansible_lsb.major_release|ing  >= "6"
+
