@@ -10,6 +10,37 @@ which is recommended for the machine / product (the latter is supported only on
 non-legacy Tuned). It can also deploy custom Tuned / Tuned legacy profiles.
 
 
+Basic Tuned Profiles
+--------------------
+
+Following basic Tuned profiles are known to this role.
+
+###balanced
+General non-specialized Tuned profile balancing performance / power
+consumption / latency.
+
+###powersave
+Tuned profile optimized for low power consumption.
+
+###throughput-performance
+Tuned profile with broadly applicable tuning providing excellent performance
+across a variety of common server workloads.
+
+###latency-performance
+Tuned profile optimizing for low latency at the cost of increased power
+consumption.
+
+
+Additional Tuned Profiles
+-------------------------
+
+There may be more Tuned profiles available depending on OS version / product,
+Tuned version, additional Tuned packages installed or third party Tuned
+packages installed. Packages providing additional Tuned profiles are usually
+prefixed by 'tuned-profiles-', e.g. 'tuned-profiles-oracle'. For list of all
+installed Tuned profiles on the system see Role Facts bellow.
+
+
 Role Variables
 --------------
 
@@ -33,7 +64,7 @@ machine / product. This is not supported on Tuned legacy, it's
 set there to the empty string.
 
 ### tuned_available_profiles
-List of Tuned profiles which are available on the machine.
+List of Tuned profiles which are available (installed) on the machine.
 
 
 Example Playbooks
