@@ -146,6 +146,24 @@ be empty:
     - tuned
 ```
 
+Install, configure, and enable Tuned. Set Tuned profile to
+throughput-performance. Change the default Tuned configuration for Tuned to
+work in non-daemon (one-shot) mode. In this mode Tuned just applies the
+settings and exits. It is generally not recommended, because many functions
+don't work without daemon, e.g. there will be no support for D-Bus, no
+rollback of settings, no tuning of hotplugged devices, no dynamic tuning, ...:
+
+```
+---
+- hosts: all
+  vars:
+    tuned_profile: throughput-performance
+    generate_tuned_main_conf: true
+    tuned_main_conf_daemon: "0"
+  roles:
+    - tuned
+```
+
 
 License
 -------
