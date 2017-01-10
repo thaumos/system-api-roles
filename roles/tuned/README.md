@@ -1,13 +1,17 @@
 tuned
 =====
 
+Tuned is a tool that can (re)configure the system according to selected
+profile (e.g. if powersave profile is selected it optimizes the system for
+low power consumption).
+
 Currently two non-compatible versions of Tuned exists - Tuned (RHEL-7+) and
 Tuned legacy (RHEL-6).
 
-This role can install, configure (only non-legacy Tuned), and start Tuned
-daemon. It can also activate arbitrary Tuned profile or activate Tuned profile
-which is recommended for the machine / product (the latter is supported only on
-non-legacy Tuned). It can also deploy custom Tuned / Tuned legacy profiles.
+This role can install, configure, and start Tuned daemon. It can also activate
+arbitrary Tuned profile or activate Tuned profile which is recommended for the
+machine / product (the latter is supported only with non-legacy Tuned). It can
+also deploy custom Tuned / Tuned legacy profiles.
 
 
 Basic Tuned Profiles
@@ -20,7 +24,7 @@ General non-specialized Tuned profile balancing performance / power
 consumption / latency.
 
 ###powersave
-Tuned profile optimized for low power consumption.
+Tuned profile optimizing for low power consumption.
 
 ###throughput-performance
 Tuned profile with broadly applicable tuning providing excellent performance
@@ -73,7 +77,7 @@ Example Playbooks
 Install, configure, and enable Tuned. Change the default Tuned configuration
 to enable dynamic tuning (non-legacy Tuned only). Also set profile which is
 recommended for the machine / product where supported, otherwise set
-throughput-performance profile (i.e. on Tuned legacy):
+throughput-performance profile (on Tuned legacy):
 
 ```
 ---
