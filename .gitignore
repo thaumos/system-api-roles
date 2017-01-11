@@ -3,3 +3,4 @@ vault.yml
 index.html
 *.retry
 
+/.vagrant

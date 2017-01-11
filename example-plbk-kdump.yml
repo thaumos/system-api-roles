@@ -4,6 +4,7 @@
 #      user: root
 #      key: "{{ lookup('file', '/root/.ssh/kdump_id_rsa.pub') }}"
 
-- hosts: testhost
+- hosts: all
+  become: true
   roles:
     - Kernel-Crash-Dump
