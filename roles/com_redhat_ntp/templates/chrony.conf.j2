@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+
+{% for server in com_redhat_ntp.ntp_servers %}
+{% if server.pool %}pool {% else %}server {% endif -%}
+{{server.hostname}} minpoll {{server.minpoll}} maxpoll {{server.maxpoll}}
+{%- if server.iburst %} iburst {% endif %}
+
+{% endfor %}
+
+# Record the rate at which the system clock gains/losses time.
+driftfile /var/lib/chrony/drift
+
+# In first three updates step the system clock instead of slew
+# if the adjustment is larger than 1 second.
+makestep 1.0 3
+
+# Enable kernel synchronization of the real-time clock (RTC).
+rtcsync
+
+# Specify directory for log files.
+logdir /var/log/chrony

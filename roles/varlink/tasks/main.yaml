@@ -1,0 +1,4 @@
+---
+
+- name: Applying configuration
+  action: varlink

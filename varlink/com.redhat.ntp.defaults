@@ -1,0 +1,11 @@
+{
+    "ntp_servers": [
+        {
+            "hostname": "0.fedora.pool.ntp.org",
+            "minpoll": 0,
+            "maxpoll": 200,
+            "iburst": true,
+            "pool": true
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+
+com.redhat.ntp {
+  type NTPServer (
+    hostname: string,
+    minpoll: uint8,
+    maxpoll: uint8,
+    iburst: bool,
+    pool: bool
+  )
+
+  type Config (
+    ntp_servers: NTPServer[]
+  )
+}

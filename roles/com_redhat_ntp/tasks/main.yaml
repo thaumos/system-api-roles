@@ -1,0 +1,10 @@
+---
+
+- name: Install chrony
+  become: true
+  package: name=chrony state=present
+
+- name: Generate chrony.conf
+  become: true
+  template: src=chrony.conf.j2 dest=/etc/chrony.conf
+  notify: restart chrony

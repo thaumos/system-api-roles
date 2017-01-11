@@ -1,0 +1,26 @@
+---
+
+- hosts: all
+
+  vars:
+    com_redhat_ntp:
+      ntp_servers:
+        - hostname: "foo.example.com"
+          pool: true
+          minpoll: 100
+          maxpoll: 500
+          iburst: true
+
+        - hostname: "bar.example.com"
+          pool: false
+          minpoll: 100
+          maxpoll: 500
+          iburst: false
+
+  roles:
+    - role: varlink
+      interfaces:
+        - 'com.redhat.ntp'
+
+    - com_redhat_ntp
+
