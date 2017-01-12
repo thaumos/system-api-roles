@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-{% for server in com_redhat_ntp.ntp_servers %}
+{% for server in config.ntp_servers %}
 {% if server.pool %}pool {% else %}server {% endif -%}
 {{server.hostname}} minpoll {{server.minpoll}} maxpoll {{server.maxpoll}}
 {%- if server.iburst %} iburst {% endif %}

@@ -19,9 +19,6 @@
           iburst: false
 
   roles:
-    - role: varlink
-      interfaces:
-        - 'com.redhat.ntp'
-
+    - varlink
     - com_redhat_ntp
 

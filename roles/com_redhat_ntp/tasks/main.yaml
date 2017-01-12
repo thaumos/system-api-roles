@@ -1,5 +1,9 @@
 ---
 
+- name: Gather config
+  action: varlink interface=com.redhat.ntp
+  register: config
+
 - name: Install chrony
   package: name=chrony state=present
 

@@ -16,31 +16,28 @@ class ActionModule(ActionBase):
     def run(self, tmp=None, task_vars=None):
         super(ActionModule, self).run(tmp, task_vars)
 
-        facts = {}
+        interface_name = self._task.args.get('interface')
+        if not interface_name:
+            return dict(failed=True, msg='need "interface" task var')
 
-        for name in task_vars.get('interfaces', []):
-            varname = name.replace('.', '_')
+        varlink_file = 'varlink/%s.api' % interface_name
+        try:
+            description = file(varlink_file).read()
+            interface = varlink.Interface(description)
+        except (ValueError, IOError) as error:
+            return dict(failed=True, msg='cannot read interface file `%s`: %s' % (varlink_file, error.strerror))
 
-            varlink_file = 'varlink/%s.api' % name
-            try:
-                description = file(varlink_file).read()
-                interface = varlink.Interface(description)
-            except (ValueError, IOError) as error:
-                return dict(failed=True, msg='cannot read interface file `%s`: %s' % (varlink_file, error.strerror))
+        defaults_file = 'varlink/%s.defaults' % interface_name
+        try:
+            config = json.load(file(defaults_file))
+        except (ValueError, IOError) as error:
+            return dict(failed=True, msg='cannot read defaults from `%s`: %s' % (defaults_file, str(error)))
 
-            defaults_file = 'varlink/%s.defaults' % name
-            try:
-                config = json.load(file(defaults_file))
-            except (ValueError, IOError) as error:
-                return dict(failed=True, msg='cannot read defaults from `%s`: %s' % (defaults_file, str(error)))
+        config.update(task_vars.get(interface_name.replace('.', '_'), {}))
 
-            config.update(task_vars.get(varname, {}))
+        try:
+            variant = varlink.Variant(interface, 'Config', config)
+        except ValueError as error:
+            return dict(failed=True, msg=str(error))
 
-            try:
-                variant = varlink.Variant(interface, 'Config', config)
-            except ValueError as error:
-                return dict(failed=True, msg=str(error))
-
-            facts[varname] = variant.to_value()
-
-        return dict(changed=True, ansible_facts=facts)
+        return variant.to_value()
