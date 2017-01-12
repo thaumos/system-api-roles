@@ -18,7 +18,11 @@
           maxpoll: 500
           iburst: false
 
+    com_redhat_tuned:
+      profile: "throughput-performance"
+
   roles:
     - varlink
     - com_redhat_ntp
+    - com_redhat_tuned
 
