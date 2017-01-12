@@ -19,22 +19,22 @@ class ActionModule(ActionBase):
         facts = {}
 
         for name in task_vars.get('interfaces', []):
-            varlink_file = 'varlink/%s.api' % name
             varname = name.replace('.', '_')
 
+            varlink_file = 'varlink/%s.api' % name
             try:
                 description = file(varlink_file).read()
                 interface = varlink.Interface(description)
             except (ValueError, IOError) as error:
                 return dict(failed=True, msg='cannot read interface file `%s`: %s' % (varlink_file, error.strerror))
 
-            config = task_vars.get(varname)
-            if not config:
-                defaults_file = 'varlink/%s.defaults' % name
-                try:
-                    config = json.load(file(defaults_file))
-                except (ValueError, IOError) as error:
-                    return dict(failed=True, msg='cannot read defaults from `%s`: %s' % (defaults_file, str(error)))
+            defaults_file = 'varlink/%s.defaults' % name
+            try:
+                config = json.load(file(defaults_file))
+            except (ValueError, IOError) as error:
+                return dict(failed=True, msg='cannot read defaults from `%s`: %s' % (defaults_file, str(error)))
+
+            config.update(task_vars.get(varname, {}))
 
             try:
                 variant = varlink.Variant(interface, 'Config', config)
