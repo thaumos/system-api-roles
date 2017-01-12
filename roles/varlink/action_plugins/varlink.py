@@ -19,7 +19,7 @@ class ActionModule(ActionBase):
         facts = {}
 
         for name in task_vars.get('interfaces', []):
-            varlink_file = 'varlink/%s.varlink' % name
+            varlink_file = 'varlink/%s.api' % name
             varname = name.replace('.', '_')
 
             try:
