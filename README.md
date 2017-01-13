@@ -71,7 +71,15 @@ This role is explained in this [README.me](https://github.com/cockpit-project/po
 This role is explained in [README.SELinux.adoc](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/README-SELinux.adoc) and demonstrated in [example-SELinux.yml](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/example-SELinux.yml) playbook.
 
 ### Storage
-An example playbook is in progress to demonstrate that existing Ansible Core modules should meet the current needs for RHEL 6 & 7.  A future module might be developed which utilizes lower level storage libraries for RHEL 7 and lager major releases.
+Example playbook [example-storage.yml](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/example-storage.yml) is provided which demonstrates basic storage configuration using the existing roles & modules already provided by Ansible.
+This will provision LVM, filesystem, mount and user ownership of disks.  Modules used include:
+
+- user
+- lvg
+- lvol
+- filesystem
+- file
+- mount
 
 ### Timesync
 This is currently in a private repository and should be merged here soon.
