@@ -1,0 +1,28 @@
+---
+
+- hosts: all
+  become: true
+
+  vars:
+    com_redhat_ntp:
+      ntp_servers:
+        - hostname: "foo.example.com"
+          pool: true
+          minpoll: 100
+          maxpoll: 500
+          iburst: true
+
+        - hostname: "bar.example.com"
+          pool: false
+          minpoll: 100
+          maxpoll: 500
+          iburst: false
+
+    com_redhat_tuned:
+      profile: "powersave"
+
+  roles:
+    - varlink
+    - com_redhat_ntp
+    - com_redhat_tuned
+

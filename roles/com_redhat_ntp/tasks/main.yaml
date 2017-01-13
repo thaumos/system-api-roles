@@ -1,0 +1,12 @@
+---
+
+- name: Gather config
+  action: varlink interface=com.redhat.ntp
+  register: config
+
+- name: Install chrony
+  package: name=chrony state=present
+
+- name: Generate chrony.conf
+  template: src=chrony.conf.j2 dest=/etc/chrony.conf
+  notify: restart chrony

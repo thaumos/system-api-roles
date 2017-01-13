@@ -27,6 +27,22 @@ Each subsystem role should follow the file and directory layout as described in 
 ## Configuration
 Current testing and development is primarily on RHEL/CentOS/Fedora applying the playbooks against KVM virtual machines.
 
+### Vagrant
+
+You can use [vagrant](http://vagrantup.com) to quickly test the example playbooks. The Vagrantfile in this repository defines [multiple machines](https://www.vagrantup.com/docs/multi-machine/) (for now `fedora` and `centos`) and runs all `vagrant` commands on all of them by default. To only run one machine, use
+
+```shell
+vagrant up MACHINE
+```
+
+None of the playbooks are run when creating and starting the VM with `vagrant up`. Instead, you can run then manually with
+
+```shell
+vagrant provision [MACHINE] --provision-with NAME
+```
+
+Where `NAME` is one of `selinux`, `kdump`, `varlink`, etc.
+
 ### vault.yml
 If using the optional Red Hat Subscription Manager example role, you will probably want to securely store your credentials in an encrypted [ansible vault](http://docs.ansible.com/ansible/playbooks_vault.html) file.  Currently this is the only role/module for this project that requires sensitive information.  It will need to include the following:
 

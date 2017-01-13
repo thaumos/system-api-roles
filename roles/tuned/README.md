@@ -1,13 +1,48 @@
 tuned
 =====
 
+Tuned is a tool that can (re)configure the system according to selected
+profile (e.g. if powersave profile is selected it optimizes the system for
+low power consumption).
+
 Currently two non-compatible versions of Tuned exists - Tuned (RHEL-7+) and
 Tuned legacy (RHEL-6).
 
-This role can install, configure (only non-legacy Tuned), and start Tuned
-daemon. It can also activate arbitrary Tuned profile or activate Tuned profile
-which is recommended for the machine / product (the latter is supported only on
-non-legacy Tuned). It can also deploy custom Tuned / Tuned legacy profiles.
+This role can install, configure, and start Tuned daemon. It can also activate
+arbitrary Tuned profile or activate Tuned profile which is recommended for the
+machine / product (the latter is supported only with non-legacy Tuned). It can
+also deploy custom Tuned / Tuned legacy profiles.
+
+
+Basic Tuned Profiles
+--------------------
+
+Following basic Tuned profiles are known to this role.
+
+###balanced
+General non-specialized Tuned profile balancing performance / power
+consumption / latency.
+
+###powersave
+Tuned profile optimizing for low power consumption.
+
+###throughput-performance
+Tuned profile with broadly applicable tuning providing excellent performance
+across a variety of common server workloads.
+
+###latency-performance
+Tuned profile optimizing for low latency at the cost of increased power
+consumption.
+
+
+Additional Tuned Profiles
+-------------------------
+
+There may be more Tuned profiles available depending on OS version / product,
+Tuned version, additional Tuned packages installed or third party Tuned
+packages installed. Packages providing additional Tuned profiles are usually
+prefixed by 'tuned-profiles-', e.g. 'tuned-profiles-oracle'. For list of all
+installed Tuned profiles on the system see Role Facts bellow.
 
 
 Role Variables
@@ -33,7 +68,7 @@ machine / product. This is not supported on Tuned legacy, it's
 set there to the empty string.
 
 ### tuned_available_profiles
-List of Tuned profiles which are available on the machine.
+List of Tuned profiles which are available (installed) on the machine.
 
 
 Example Playbooks
@@ -42,7 +77,7 @@ Example Playbooks
 Install, configure, and enable Tuned. Change the default Tuned configuration
 to enable dynamic tuning (non-legacy Tuned only). Also set profile which is
 recommended for the machine / product where supported, otherwise set
-throughput-performance profile (i.e. on Tuned legacy):
+throughput-performance profile (on Tuned legacy):
 
 ```
 ---
@@ -111,6 +146,24 @@ be empty:
     tuned_profile: myprofile1
     tuned_legacy_profile: ""
     deploy_tuned_profiles: true
+  roles:
+    - tuned
+```
+
+Install, configure, and enable Tuned. Set Tuned profile to
+throughput-performance. Change the default Tuned configuration for Tuned to
+work in non-daemon (one-shot) mode. In this mode Tuned just applies the
+settings and exits. It is generally not recommended, because many functions
+don't work without daemon, e.g. there will be no support for D-Bus, no
+rollback of settings, no tuning of hotplugged devices, no dynamic tuning, ...:
+
+```
+---
+- hosts: all
+  vars:
+    tuned_profile: throughput-performance
+    generate_tuned_main_conf: true
+    tuned_main_conf_daemon: "0"
   roles:
     - tuned
 ```

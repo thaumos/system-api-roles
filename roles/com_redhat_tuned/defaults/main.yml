@@ -1,0 +1,4 @@
+---
+# Tuned legacy has different profile names, this variable maps Tuned profile
+# names to the most appropriate / similar Tuned legacy profile names.
+tuned_legacy_profiles_map: {"balanced": "default", "powersave": "server-powersave"}

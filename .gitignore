@@ -1,5 +1,9 @@
+*.pyc
+*.swp
+
 passes.yml
 vault.yml
 index.html
 *.retry
 
+/.vagrant
