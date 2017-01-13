@@ -28,9 +28,9 @@
 - set_fact:
     tuned_recommended_profile: "{{ (recommend.stdout == ' *fail') | ternary('',recommend.stdout) }}"
 
-- name: Set Tuned legacy profile {{ tuned_legacy_profile }}
-  command: tuned-adm profile {{ tuned_legacy_profile }}
-  when: tuned_legacy and tuned_legacy_profile != ""
+- name: Set Tuned legacy profile {{ tuned_legacy_profiles_map[config.profile] }}
+  command: tuned-adm profile {{ tuned_legacy_profiles_map[config.profile] }}
+  when: tuned_legacy and tuned_legacy_profiles_map.get(config.profile)
 
 - name: Set Tuned profile {{ config.profile }}
   command: tuned-adm profile {{ config.profile }}
