@@ -19,7 +19,7 @@
           iburst: false
 
     com_redhat_tuned:
-      profile: "throughput-performance"
+      profile: "powersave"
 
   roles:
     - varlink
