@@ -1,0 +1,100 @@
+---
+
+# This example playbook uses existing Ansible Core and Extras modules to provision LVM, filesystem, mount and user ownership of disks.  Modules used include:
+#   user
+#   lvg
+#   lvol
+#   filesystem
+#   file
+#   mount
+
+
+- hosts: rhel7
+  become: yes
+  become_method: sudo
+  become_user: root
+
+  tasks:
+
+  - name: Create user to own and access data
+    user:
+      name: myapp
+      createhome: no
+      shell: /sbin/nologin
+      state: present
+
+  # Add disks as PVs to the VG
+  - name: Verify or create Volume Group
+    lvg:
+      vg: DATA
+      pvs: /dev/sda,/dev/sdb,/dev/sdc,/dev/sdd
+      state: present
+
+  # LVM RAID 1 Mirror:  create LV, mkfs and mount
+#  - name: Verify or create a mirrored LV
+#    lvol:
+#      lv: data_mirror
+#      vg: DATA
+#      pvs: /dev/sda,/dev/sdb
+#      state: present
+#      active: yes
+#      opts: "-m 1"
+#      size: "100%FREE"
+
+  - name: Verify or apply filesystem to mirror
+    filesystem:
+      fstype: ext4
+      dev: /dev/mapper/DATA-data_mirror
+
+  - name: Create directory
+    file: 
+      path: /myapp/data
+      state: directory
+      owner: myapp
+      group: myapp
+      mode: 0750
+
+  - name: mount mirror
+    mount:
+      name: /myapp/data
+      src: /dev/mapper/DATA-data_mirror
+      fstype: ext4
+      opts: rw,noatime,nodirtime
+      state: present
+
+
+
+  # LVM RAID 0 Mirror:  create LV, mkfs and mount
+#  - name: Verify or create a striped LV
+#    lvol:
+#      lv: data_striped
+#      vg: DATA
+#      pvs: /dev/sdc,/dev/sdd
+#      state: present
+#      active: yes
+#      opts: "-i 2"
+#      size: "100%FREE"
+
+  - name: Verify or apply filesystem to stripe
+    filesystem:
+      fstype: xfs
+      dev: /dev/mapper/DATA-data_striped
+
+  - name: Create directory
+    file: 
+      path: /myapp/logs
+      state: directory
+      owner: myapp
+      group: myapp
+      mode: 0750
+
+  - name: mount stripe
+    mount:
+      name: /myapp/logs
+      src: /dev/mapper/DATA-data_striped
+      fstype: xfs
+      opts: rw,noatime,nodirtime
+      state: present
+
+
+
