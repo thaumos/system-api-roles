@@ -20,14 +20,14 @@ class ActionModule(ActionBase):
         if not interface_name:
             return dict(failed=True, msg='need "interface" task var')
 
-        varlink_file = 'varlink/%s.api' % interface_name
+        varlink_file = 'api/%s.api' % interface_name
         try:
             description = file(varlink_file).read()
             interface = varlink.Interface(description)
         except (ValueError, IOError) as error:
             return dict(failed=True, msg='cannot read interface file `%s`: %s' % (varlink_file, error.strerror))
 
-        defaults_file = 'varlink/%s.defaults' % interface_name
+        defaults_file = 'api/%s.defaults' % interface_name
         try:
             config = json.load(file(defaults_file))
         except (ValueError, IOError) as error:

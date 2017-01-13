@@ -1,5 +1,8 @@
-
 /**
+ * This is a Varlink based API for configuring Performance profiles.
+ *
+ * https://github.com/cockpit-project/poc-sysmgmt-roles/wiki/System-Service-Configuration-API
+ *
  * Tuned profile configuration
  *
  * use_recommended_profile:
