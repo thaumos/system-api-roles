@@ -1,4 +1,5 @@
 *.pyc
+*.swp
 
 passes.yml
 vault.yml
