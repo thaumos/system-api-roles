@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+{% if config.dump_target %}
+{{config.dump_target.kind}} {{config.dump_target.location}}
+{% endif %}
+path {{config.path}}
+{% if config.core_collector %}
+core_collector {{config.core_collector}}
+{% endif %}
+default {{config.action}}
