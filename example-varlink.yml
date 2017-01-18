@@ -25,4 +25,5 @@
     - varlink
     - com_redhat_ntp
     - com_redhat_tuned
+    - com_redhat_kdump
 

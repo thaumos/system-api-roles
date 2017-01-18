@@ -1,0 +1,12 @@
+---
+- name: Gather config
+  action: varlink interface=com.redhat.kdump
+  register: config
+
+- name: Install kexec-tools
+  package: name=kexec-tools state=present
+
+- name: Generate /etc/kdump.conf
+  template: src=kdump.conf.j2 dest=/etc/kdump.conf
+  when: ansible_cmdline.get('crashkernel')
+  notify: restart kdump
