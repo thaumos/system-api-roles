@@ -6,8 +6,8 @@
 com.redhat.ntp {
   type NTPServer (
     hostname: string,
-    minpoll: uint8,
-    maxpoll: uint8,
+    minpoll: int8,
+    maxpoll: int8,
     iburst: bool,
     pool: bool
   )

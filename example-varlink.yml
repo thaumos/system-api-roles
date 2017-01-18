@@ -8,14 +8,14 @@
       ntp_servers:
         - hostname: "foo.example.com"
           pool: true
-          minpoll: 100
-          maxpoll: 500
+          minpoll: 6
+          maxpoll: 10
           iburst: true
 
         - hostname: "bar.example.com"
           pool: false
-          minpoll: 100
-          maxpoll: 500
+          minpoll: 4
+          maxpoll: 6
           iburst: false
 
     com_redhat_tuned:
