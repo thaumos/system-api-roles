@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+
+{% for value in ntp_servers %}
+{{ 'pool' if 'pool' in value and value['pool'] else 'server' }} {{
+value['name'] }}{{
+' minpoll {0}'.format(value['minpoll']) if 'minpoll' in value else '' }}{{
+' maxpoll {0}'.format(value['maxpoll']) if 'maxpoll' in value else '' }}{{
+' iburst' if 'iburst' in value and value else '' }}
+{% endfor %}
+
+# In first three updates step the system clock instead of slew
+# if the adjustment is larger than 1 second.
+makestep 1.0 3
+
+# Enable kernel synchronization of the real-time clock (RTC).
+rtcsync
+
+# Record the rate at which the system clock gains/losses time.
+driftfile /var/lib/chrony/drift
+
+{% if chrony_extra_conf is defined %}
+{{ chrony_extra_conf }}
+{% endif %}

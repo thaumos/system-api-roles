@@ -1,0 +1,3 @@
+---
+ntp_implementation: chrony
+ptp_implementation: linuxptp
