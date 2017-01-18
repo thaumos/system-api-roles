@@ -183,7 +183,7 @@ class Variant:
         self.type = parse_type(scanner, interface)
 
         t = self.type.resolve()
-        if t.nullable and value == None:
+        if (self.type.nullable or t.nullable) and value == None:
             self.value = None
         elif t.kind == 'bool':
             self.value = bool(value)
@@ -209,7 +209,9 @@ class Variant:
         """converts this variant to a plain python value"""
 
         t = self.type.resolve()
-        if t.kind == 'array':
+        if (self.type.nullable or t.nullable) and self.value == None:
+            return None
+        elif t.kind == 'array':
             return [v.to_value() for v in self.value]
         elif t.kind == 'struct':
             return dict([(n, v.to_value()) for n, v in self.value.iteritems()])
