@@ -82,7 +82,7 @@ This will provision LVM, filesystem, mount and user ownership of disks.  Modules
 - mount
 
 ### Timesync
-This is currently in a private repository and should be merged here soon.
+This role is explained in this [README.md](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/timesync/README.md) which includes example playbooks.
 
 ### tuned
 This role is explained in this [README.md](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/tuned/README.md) which includes an example playbook.
