@@ -41,7 +41,14 @@ None of the playbooks are run when creating and starting the VM with `vagrant up
 vagrant provision [MACHINE] --provision-with NAME
 ```
 
-Where `NAME` is one of `selinux`, `kdump`, `varlink`, etc.
+Where `NAME` is one of `selinux`, `kdump`, `system-api`, etc.
+
+### Roles as System API
+
+The System API is a generic way to configure a system according to formally defined API.
+Various roles contribute toward the implementation of that API. The API is formally
+described in the ```api/``` directory and an ```example-system-api.yml``` playbook example
+that calls it.
 
 ### vault.yml
 If using the optional Red Hat Subscription Manager example role, you will probably want to securely store your credentials in an encrypted [ansible vault](http://docs.ansible.com/ansible/playbooks_vault.html) file.  Currently this is the only role/module for this project that requires sensitive information.  It will need to include the following:
