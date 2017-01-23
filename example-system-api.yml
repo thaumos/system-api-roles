@@ -22,7 +22,7 @@
       profile: "powersave"
 
   roles:
-    - varlink
+    - system-api
     - com_redhat_ntp
     - com_redhat_tuned
     - com_redhat_kdump
