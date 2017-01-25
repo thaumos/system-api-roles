@@ -3,8 +3,8 @@
 - hosts: all
   become: true
 
-  vars:
-    com_redhat_ntp:
+  roles:
+    - role: com_redhat_ntp
       ntp_servers:
         - hostname: "foo.example.com"
           pool: true
@@ -18,11 +18,8 @@
           maxpoll: 6
           iburst: false
 
-    com_redhat_tuned:
+    - role: com_redhat_tuned
       profile: "powersave"
 
-  roles:
-    - com_redhat_ntp
-    - com_redhat_tuned
     - com_redhat_kdump
 

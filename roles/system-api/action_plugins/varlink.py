@@ -33,7 +33,10 @@ class ActionModule(ActionBase):
         except (ValueError, IOError) as error:
             return dict(failed=True, msg='cannot read defaults from `%s`: %s' % (defaults_file, str(error)))
 
-        config.update(task_vars.get(interface_name.replace('.', '_'), {}))
+        for key in config.keys():
+            value = task_vars.get(key)
+            if value is not None:
+                config[key] = value
 
         try:
             variant = varlink.Variant(interface, 'Config', config)
