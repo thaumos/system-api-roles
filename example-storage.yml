@@ -1,13 +1,16 @@
 ---
 
-# This example playbook uses existing Ansible Core and Extras modules to provision LVM, filesystem, mount and user ownership of disks.  Modules used include:
-#   user
-#   lvg
-#   lvol
-#   filesystem
-#   file
-#   mount
-
+# This example playbook uses existing Ansible Core and Extras modules to provision LVM, 
+# filesystem, mount and user ownership of disks.  
+# Assumes 4 disks have been presented to a VM ( /dev/sd{a..d} )
+#
+# Modules used include:
+# user        http://docs.ansible.com/ansible/user_module.html
+# file        http://docs.ansible.com/ansible/file_module.html
+# lvg         http://docs.ansible.com/ansible/lvg_module.html
+# lvol        http://docs.ansible.com/ansible/lvol_module.html
+# filesystem  http://docs.ansible.com/ansible/filesystem_module.html
+# mount       http://docs.ansible.com/ansible/mount_module.html
 
 - hosts: rhel7
   become: yes
@@ -23,7 +26,6 @@
       shell: /sbin/nologin
       state: present
 
-  # Add disks as PVs to the VG
   - name: Verify or create Volume Group
     lvg:
       vg: DATA
@@ -31,15 +33,16 @@
       state: present
 
   # LVM RAID 1 Mirror:  create LV, mkfs and mount
-#  - name: Verify or create a mirrored LV
-#    lvol:
-#      lv: data_mirror
-#      vg: DATA
-#      pvs: /dev/sda,/dev/sdb
-#      state: present
-#      active: yes
-#      opts: "-m 1"
-#      size: "100%FREE"
+  - name: Verify or create a mirrored LV
+    lvol:
+      lv: data_mirror
+      vg: DATA
+      pvs: /dev/sda,/dev/sdb
+      state: present
+      active: yes
+      opts: "-m 1"
+      #size: "100%FREE"
+      size: 464M
 
   - name: Verify or apply filesystem to mirror
     filesystem:
@@ -59,21 +62,20 @@
       name: /myapp/data
       src: /dev/mapper/DATA-data_mirror
       fstype: ext4
-      opts: rw,noatime,nodirtime
-      state: present
-
-
+      opts: rw,noatime,nodiratime,nofail
+      state: mounted
 
   # LVM RAID 0 Mirror:  create LV, mkfs and mount
-#  - name: Verify or create a striped LV
-#    lvol:
-#      lv: data_striped
-#      vg: DATA
-#      pvs: /dev/sdc,/dev/sdd
-#      state: present
-#      active: yes
-#      opts: "-i 2"
-#      size: "100%FREE"
+  - name: Verify or create a striped LV
+    lvol:
+      lv: data_striped
+      vg: DATA
+      pvs: /dev/sdc,/dev/sdd
+      state: present
+      active: yes
+      opts: "-i 2"
+      #size: "100%FREE"
+      size: 936M
 
   - name: Verify or apply filesystem to stripe
     filesystem:
@@ -93,8 +95,6 @@
       name: /myapp/logs
       src: /dev/mapper/DATA-data_striped
       fstype: xfs
-      opts: rw,noatime,nodirtime
-      state: present
-
-
+      opts: rw,noatime,nodiratime,nofail
+      state: mounted
 
