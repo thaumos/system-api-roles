@@ -1,0 +1,18 @@
+/*
+ * This is a Varlink based API for configuring time synchronization.
+ *
+ * https://github.com/cockpit-project/poc-sysmgmt-roles/wiki/System-Service-Configuration-API
+ */
+com.redhat.ntp {
+  type NTPServer (
+    hostname: string,
+    minpoll: int8,
+    maxpoll: int8,
+    iburst: bool,
+    pool: bool
+  )
+
+  type Config (
+    ntp_servers: NTPServer[]
+  )
+}

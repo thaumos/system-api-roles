@@ -8,6 +8,7 @@ path = os.path.join(os.path.dirname(__file__), '..', 'lib')
 sys.path.insert(0, os.path.normpath(path))
 
 from ansible.plugins.action import ActionBase
+import os
 import json
 import varlink
 
@@ -20,14 +21,14 @@ class ActionModule(ActionBase):
         if not interface_name:
             return dict(failed=True, msg='need "interface" task var')
 
-        varlink_file = 'api/%s.api' % interface_name
+        varlink_file = os.path.join(self._task._role._role_path, 'api/%s.api' % interface_name)
         try:
             description = file(varlink_file).read()
             interface = varlink.Interface(description)
         except (ValueError, IOError) as error:
             return dict(failed=True, msg='cannot read interface file `%s`: %s' % (varlink_file, error.strerror))
 
-        defaults_file = 'api/%s.defaults' % interface_name
+        defaults_file = os.path.join(self._task._role._role_path, 'api/%s.defaults' % interface_name)
         try:
             config = json.load(file(defaults_file))
         except (ValueError, IOError) as error:
