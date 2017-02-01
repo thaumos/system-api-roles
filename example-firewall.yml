@@ -1,4 +1,5 @@
 - hosts: localhost
+  become: true
   vars:
     firewall:
       - { service: [ 'tftp', 'ftp' ],
