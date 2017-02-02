@@ -24,9 +24,12 @@ Vagrant.configure(2) do |config|
         ansible.playbook = "example-plbk-kdump.yml"
       end
 
+      config.vm.provision "firewall", type: "ansible" do |ansible|
+        ansible.playbook = "example-firewall.yml"
+      end
+
       config.vm.provision "system-api", type: "ansible" do |ansible|
         ansible.playbook = "example-system-api.yml"
-        ansible.verbose = true
       end
 
     end
