@@ -6,7 +6,11 @@
 - name: Install kexec-tools
   package: name=kexec-tools state=present
 
+- name: Find out reserved memory for the crash kernel
+  command: cat /sys/kernel/kexec_crash_size
+  register: kexec_crash_size
+
 - name: Generate /etc/kdump.conf
   template: src=kdump.conf.j2 dest=/etc/kdump.conf
-  when: ansible_cmdline.get('crashkernel')
+  when: kexec_crash_size|int > 0
   notify: restart kdump
