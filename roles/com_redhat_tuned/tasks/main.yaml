@@ -4,7 +4,7 @@
   register: config
 
 - name: Install Tuned
-  package: name=tuned state=latest
+  package: name=tuned state=present
 
 - name: Enable Tuned
   service: name=tuned state=started enabled=yes
