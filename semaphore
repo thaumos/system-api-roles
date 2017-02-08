@@ -5,7 +5,7 @@ set -x
 
 prepare() {
   # install qemu because its post install script sets up /dev/kvm
-  sudo apt-get install -y qemu-system-x86
+  sudo apt-get install -q -y qemu-system-x86
 
   sudo chmod a+rw /dev/kvm
 
@@ -13,7 +13,9 @@ prepare() {
 }
 
 run() {
-  make check CACHEDIR=$SEMAPHORE_CACHE_DIR
+  set -o pipefail
+  make check CACHEDIR=$SEMAPHORE_CACHE_DIR | tee
+  set +o pipefail
 
   docker-cache snapshot
 }
