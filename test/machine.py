@@ -6,10 +6,23 @@ import os
 import subprocess
 import time
 import avocado
+from avocado.utils import process
 import yaml
-import re
 import tempfile
 import logging
+
+
+def run(cmd, timeout=60, env=None, log_error=True):
+    if isinstance(cmd, list):
+        cmd = ' '.join(['"%s"' % arg for arg in cmd])
+
+    result = process.run(cmd, verbose=False, ignore_status=True, env=env)
+    if result.exit_status != 0:
+        if log_error:
+            logging.error(result)
+        raise process.CmdError(cmd, result)
+
+    return result.stdout
 
 
 class Machine:
@@ -19,7 +32,7 @@ class Machine:
         self.rolesdir = rolesdir
 
         self.identity = os.path.join(self.workdir, 'id_rsa')
-        avocado.utils.process.run('ssh-keygen -q -f "%s" -N ""' % self.identity)
+        run(['ssh-keygen', '-q', '-f', self.identity, '-N', ''])
 
         with open(os.path.join(self.workdir, 'meta-data'), 'w') as f:
             f.write('instance-id: nocloud\n')
@@ -36,14 +49,12 @@ class Machine:
             f.write('  - ' + open(self.identity + '.pub', 'r').read())
 
         cloudinit_iso = os.path.join(workdir, 'cloud-init.iso')
-        argv = ['genisoimage',
-                '-input-charset', 'utf-8',
-                '-output', cloudinit_iso,
-                '-volid', 'cidata',
-                '-joliet', '-rock', '-quiet',
-                os.path.join(workdir, 'user-data'),
-                os.path.join(workdir, 'meta-data')]
-        avocado.utils.process.run(' '.join(argv))
+        run(['genisoimage', '-input-charset', 'utf-8',
+                            '-output', cloudinit_iso,
+                            '-volid', 'cidata',
+                            '-joliet', '-rock', '-quiet',
+                            os.path.join(workdir, 'user-data'),
+                            os.path.join(workdir, 'meta-data')])
 
         argv = ['qemu-system-x86_64',
                 '-m', '1024',
@@ -56,15 +67,16 @@ class Machine:
         if os.access('/dev/kvm', os.W_OK):
             argv.append('-enable-kvm')
 
-        logging.info('Running %s', ' '.join(argv))
         self.qemu = subprocess.Popen(argv)
 
         # wait for ssh to come up
-        for _ in range(10):
-            r = self.execute('/bin/true', timeout=60)
-            if r.exit_status == 0:
+        tries = 10
+        while tries > 0:
+            try:
+                self.execute('/bin/true', timeout=60, log_error=(tries == 1))
                 break
-            else:
+            except process.CmdError:
+                tries -= 1
                 time.sleep(3)
         else:
             self.terminate()
@@ -82,15 +94,13 @@ class Machine:
         with open(self.inventory_file, 'w') as f:
             f.write(host)
 
-    def execute(self, command, timeout=None):
-        argv = ['ssh',
-                '-o', 'IdentityFile=' + self.identity,
-                '-o', 'StrictHostKeyChecking=no',
-                '-o', 'UserKnownHostsFile=/dev/null',
-                '-o', 'PasswordAuthentication=no',
-                 'admin@localhost', '-p', '2222', command]
-
-        return avocado.utils.process.run(' '.join(argv), ignore_status=True, timeout=timeout)
+    def execute(self, command, timeout=None, log_error=False):
+        return run(['ssh', '-o', 'IdentityFile=' + self.identity,
+                           '-o', 'StrictHostKeyChecking=no',
+                           '-o', 'UserKnownHostsFile=/dev/null',
+                           '-o', 'PasswordAuthentication=no',
+                            'admin@localhost', '-p', '2222', command],
+                   timeout=timeout, log_error=log_error)
 
     def terminate(self):
         self.qemu.terminate()
@@ -109,11 +119,8 @@ class Machine:
             f.write(yaml.dump(playbook))
 
         env = dict(ANSIBLE_ROLES_PATH=self.rolesdir, **os.environ)
-        cmd = 'ansible-playbook -vvv -i %s %s' % (self.inventory_file, playbook_file)
 
-        result = avocado.utils.process.run(cmd, env=env, ignore_status=True)
-        if result.exit_status != 0:
-            raise AssertionError('error setting configuration')
+        run(['ansible-playbook', '-vvv', '-i', self.inventory_file, playbook_file], env=env)
 
 
 class Test(avocado.Test):
@@ -136,17 +143,3 @@ class Test(avocado.Test):
 
     def tearDown(self):
         self.machine.terminate()
-
-    def assertOutput(self, command, expected):
-        """
-        Run 'command' on the vm and assert that the command's output matches
-        the regular expression in 'expected'.
-        """
-
-        result = self.machine.execute(command)
-
-        if result.exit_status != 0:
-            raise AssertionError(str(result))
-
-        if not re.match(expected + '$', result.stdout):
-            raise AssertionError('output "%s" does not match expectation "%s"' % (result.stdout, expected))
