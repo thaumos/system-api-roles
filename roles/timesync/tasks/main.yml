@@ -38,32 +38,32 @@
   when: sync_mode == 2 and ptp_implementation == 'linuxptp'
 
 - name: Generate chrony.conf file
-  template: src=chrony.conf.j2 dest=/etc/chrony.conf
+  template: src=chrony.conf.j2 dest=/etc/chrony.conf backup=yes
   notify: restart {{ 'chronyd' if sync_mode == 1 else 'timemaster' }}
   when: sync_mode != 2 and ntp_implementation == 'chrony'
 
 - name: Generate ntp.conf file
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf backup=yes
   notify: restart {{ 'ntpd' if sync_mode == 1 else 'timemaster' }}
   when: sync_mode != 2 and ntp_implementation == 'ntp'
 
 - name: Generate ptp4l.conf file
-  template: src=ptp4l.conf.j2 dest=/etc/ptp4l.conf
+  template: src=ptp4l.conf.j2 dest=/etc/ptp4l.conf backup=yes
   notify: restart ptp4l
   when: sync_mode == 2 and ptp_implementation == 'linuxptp'
 
 - name: Generate ptp4l sysconfig file
-  template: src=ptp4l.sysconfig.j2 dest=/etc/sysconfig/ptp4l
+  template: src=ptp4l.sysconfig.j2 dest=/etc/sysconfig/ptp4l backup=yes
   notify: restart ptp4l
   when: sync_mode == 2 and ptp_implementation == 'linuxptp'
 
 - name: Generate phc2sys sysconfig file
-  template: src=phc2sys.sysconfig.j2 dest=/etc/sysconfig/phc2sys
+  template: src=phc2sys.sysconfig.j2 dest=/etc/sysconfig/phc2sys backup=yes
   notify: restart phc2sys
   when: sync_mode == 2 and ptp_implementation == 'linuxptp' and mode2_hwts
 
 - name: Generate timemaster.conf file
-  template: src=timemaster.conf.j2 dest=/etc/timemaster.conf
+  template: src=timemaster.conf.j2 dest=/etc/timemaster.conf backup=yes
   notify: restart timemaster
   when: sync_mode == 3
 
