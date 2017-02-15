@@ -37,6 +37,13 @@
     mode2_hwts: "{{ phc_ctl_output.rc == 0 }}"
   when: sync_mode == 2 and ptp_implementation == 'linuxptp'
 
+- name: Get chrony version
+  command: rpm -q --qf '%{version}' chrony
+  args:
+    warn: no
+  register: chrony_version
+  when: sync_mode != 2 and ntp_implementation == 'chrony'
+
 - name: Generate chrony.conf file
   template: src=chrony.conf.j2 dest=/etc/chrony.conf backup=yes mode=0644
   notify: restart {{ 'chronyd' if sync_mode == 1 else 'timemaster' }}

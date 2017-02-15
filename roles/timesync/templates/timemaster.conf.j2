@@ -30,6 +30,9 @@ includefile /etc/ntp.conf
 
 [chronyd]
 path /usr/sbin/chronyd
+{% if ntp_implementation == 'chrony' and chrony_version.stdout|version_compare('1.30', '<') %}
+options -u chrony
+{% endif %}
 
 [ntpd]
 path /usr/sbin/ntpd
