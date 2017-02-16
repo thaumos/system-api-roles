@@ -112,6 +112,14 @@
   when: sync_mode != 1 or ntp_implementation != 'ntp'
   ignore_errors: yes
 
+- name: Disable ntpdate
+  service: name=ntpdate state=stopped enabled=no
+  ignore_errors: yes
+
+- name: Disable sntp
+  service: name=sntp state=stopped enabled=no
+  ignore_errors: yes
+
 - name: Disable ptp4l
   service: name=ptp4l state=stopped enabled=no
   when: sync_mode != 2 or ptp_implementation != 'linuxptp'
