@@ -91,6 +91,17 @@
   notify: restart timemaster
   when: sync_mode == 3
 
+- name: Update network sysconfig file
+  lineinfile:
+    dest: /etc/sysconfig/network
+    create: yes
+    mode: 0644
+    regexp: '^PEERNTP='
+    line: 'PEERNTP=no'
+    state: "{{ 'absent' if dhcp_ntp_servers else 'present' }}"
+  notify: restart {{ ntp_implementation + 'd' }}
+  when: sync_mode == 1
+
 - name: Disable chronyd
   service: name=chronyd state=stopped enabled=no
   when: sync_mode != 1 or ntp_implementation != 'chrony'

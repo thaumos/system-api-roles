@@ -43,6 +43,9 @@ ptp_domains:
     udp_ttl: 1                  # TTL for UDPv4 and UDPv6 transports
                                 # (default 1)
 
+# Flag enabling use of NTP servers provided by DHCP (default no)
+dhcp_ntp_servers: no
+
 # Minimum number of selectable time sources required to allow synchronization
 # of the clock with chronyd and ntpd (default 1)
 min_time_sources: 1
