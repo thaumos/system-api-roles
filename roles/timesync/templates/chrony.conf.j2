@@ -24,6 +24,26 @@ minsources {{ min_time_sources }}
 # Record the rate at which the system clock gains/losses time.
 driftfile /var/lib/chrony/drift
 
+{% if chrony_version.stdout|version_compare('2.0', '<') %}
+# Decrease weight of stratum in source selection.
+stratumweight 0.001
+
+# Listen for commands only on localhost.
+bindcmdaddress 127.0.0.1
+bindcmdaddress ::1
+
+{% endif %}
+{% if chrony_version.stdout|version_compare('2.2', '<') %}
+# Specify file containing keys for NTP and command authentication.
+keyfile /etc/chrony.keys
+
+# Specify ID of command key.
+commandkey 1
+
+# Generate command key if missing.
+generatecommandkey
+
+{% endif %}
 {% if chrony_extra_conf is defined %}
 {{ chrony_extra_conf }}
 {% endif %}
