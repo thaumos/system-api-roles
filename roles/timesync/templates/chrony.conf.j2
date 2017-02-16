@@ -15,6 +15,12 @@ makestep 1.0 3
 # Enable kernel synchronization of the real-time clock (RTC).
 rtcsync
 
+{% if min_time_sources > 1 %}
+# Increase the minimum number of selectable sources required to adjust
+# the system clock.
+minsources {{ min_time_sources }}
+
+{% endif %}
 # Record the rate at which the system clock gains/losses time.
 driftfile /var/lib/chrony/drift
 

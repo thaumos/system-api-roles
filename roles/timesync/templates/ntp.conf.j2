@@ -23,6 +23,12 @@ restrict -6 default nomodify notrap nopeer noquery
 restrict 127.0.0.1 
 restrict ::1
 
+{% if min_time_sources > 1 %}
+# Increase the minimum number of selectable sources required to adjust
+# the system clock.
+tos minsane {{ min_time_sources }}
+
+{% endif %}
 {% if ntp_extra_conf is defined %}
 {{ ntp_extra_conf }}
 {% endif %}

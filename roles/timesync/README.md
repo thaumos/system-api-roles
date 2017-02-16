@@ -43,6 +43,10 @@ ptp_domains:
     udp_ttl: 1                  # TTL for UDPv4 and UDPv6 transports
                                 # (default 1)
 
+# Minimum number of selectable time sources required to allow synchronization
+# of the clock with chronyd and ntpd (default 1)
+min_time_sources: 1
+
 # Extra options that will be added to chrony.conf (optional)
 chrony_extra_conf: |
   logdir /var/log/chrony

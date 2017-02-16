@@ -1,3 +1,4 @@
 ---
 ntp_implementation: chrony
 ptp_implementation: linuxptp
+min_time_sources: 1
