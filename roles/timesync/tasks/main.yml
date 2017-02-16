@@ -44,6 +44,13 @@
   register: chrony_version
   when: sync_mode != 2 and ntp_implementation == 'chrony'
 
+- name: Get ntp version
+  command: rpm -q --qf '%{version}' ntp
+  args:
+    warn: no
+  register: ntp_version
+  when: sync_mode != 2 and ntp_implementation == 'ntp'
+
 - name: Generate chrony.conf file
   template: src=chrony.conf.j2 dest=/etc/chrony.conf backup=yes mode=0644
   notify: restart {{ 'chronyd' if sync_mode == 1 else 'timemaster' }}
