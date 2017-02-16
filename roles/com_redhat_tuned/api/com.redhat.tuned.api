@@ -36,13 +36,13 @@
 
 com.redhat.tuned {
   type Config (
-    use_recommended_profile: bool,
-    profile: string,
-    daemon: bool,
-    dynamic_tuning: bool,
-    sleep_interval: uint64,
-    update_interval: uint64,
-    enable_recommend: bool,
-    reapply_sysctl: bool
+    use_recommended_profile: bool = false,
+    profile: string = "balanced",
+    daemon: bool = true,
+    dynamic_tuning: bool = true,
+    sleep_interval: uint64 = 1,
+    update_interval: uint64 = 10,
+    enable_recommend: bool = true,
+    reapply_sysctl: bool = true
   )
 }

@@ -6,10 +6,10 @@
 com.redhat.ntp {
   type NTPServer (
     hostname: string,
-    minpoll: int8,
-    maxpoll: int8,
-    iburst: bool,
-    pool: bool
+    minpoll: int8 = 6,
+    maxpoll: int8 = 10,
+    iburst: bool = true,
+    pool: bool = true
   )
 
   type Config (

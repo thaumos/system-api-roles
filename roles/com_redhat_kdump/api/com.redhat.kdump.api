@@ -39,8 +39,8 @@ com.redhat.kdump {
 
   type Config (
     dump_target: DumpTarget?,
-    path: string,
+    path: string = "/var/crash",
     core_collector: string?,
-    action: string
+    action: string = "reboot"
   )
 }

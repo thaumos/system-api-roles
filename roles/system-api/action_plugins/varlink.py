@@ -28,18 +28,18 @@ class ActionModule(ActionBase):
         except (ValueError, IOError) as error:
             return dict(failed=True, msg='cannot read interface file `%s`: %s' % (varlink_file, error.strerror))
 
-        defaults_file = os.path.join(self._task._role._role_path, 'api/%s.defaults' % interface_name)
-        try:
-            config = json.load(file(defaults_file))
-        except (ValueError, IOError) as error:
-            return dict(failed=True, msg='cannot read defaults from `%s`: %s' % (defaults_file, str(error)))
+        config_type = interface.get_type('Config')
+        if not config_type:
+            return dict(failed=True, msg='interface `%s` does not contain a type named `Config`' % interface_name)
 
-        for key in config.keys():
-            value = task_vars.get(key)
+        config = {}
+        for name in config_type.fields.keys():
+            value = task_vars.get(name)
             if value is not None:
-                config[key] = value
+                config[name] = value
 
         try:
-            return varlink.load(interface.Config, config)
+            x = varlink.load(config_type, config)
+            return x
         except ValueError as error:
             return dict(failed=True, msg=str(error))

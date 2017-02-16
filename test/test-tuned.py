@@ -10,6 +10,10 @@ class TestTuned(machine.Test):
     """
 
     def test(self):
+        # the default profile is 'balanced'
+        self.machine.set_config('com.redhat.tuned')
+        self.assertEqual(self.get_active_profile(), 'balanced')
+
         for profile in ('balanced', 'powersave', 'throughput-performance', 'latency-performance'):
             self.machine.set_config('com.redhat.tuned', profile=profile)
             self.assertEqual(profile, self.get_active_profile())
