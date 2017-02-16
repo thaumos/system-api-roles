@@ -24,7 +24,7 @@ class ActionModule(ActionBase):
         varlink_file = os.path.join(self._task._role._role_path, 'api/%s.api' % interface_name)
         try:
             description = file(varlink_file).read()
-            interface = varlink.Interface(description)
+            interface = varlink.interface(description)
         except (ValueError, IOError) as error:
             return dict(failed=True, msg='cannot read interface file `%s`: %s' % (varlink_file, error.strerror))
 
@@ -40,8 +40,6 @@ class ActionModule(ActionBase):
                 config[key] = value
 
         try:
-            variant = varlink.Variant(interface, 'Config', config)
+            return varlink.load(interface.Config, config)
         except ValueError as error:
             return dict(failed=True, msg=str(error))
-
-        return variant.to_value()

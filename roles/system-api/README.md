@@ -24,6 +24,14 @@ You can then use the `config` variable, which is guaranteed to include all varia
 
 The only mandatory variable is `interface`, which should point to the interface
 
+# Varlink
+
+This role uses [python-varlink](https://github.com/varlink/python-varlink) to parse API files and validate configuration values.
+
+The library is bundled in the `lib/` directory of this role, so that the role can be distributed without dependencies. To update the library, copy its top-level `varlink/` directory into `lib/`.
+
+Please file issues and pull requests for `python-varlink` upstream on its project page.
+
 # License
 
 MIT
