@@ -8,10 +8,11 @@ value['name'] }}{{
 ' iburst' if 'iburst' in value and value else '' }}
 {% endfor %}
 
-# In first three updates step the system clock instead of slew
-# if the adjustment is larger than 1 second.
-makestep 1.0 3
+{% if clock_step_threshold is not defined or clock_step_threshold > 0.0 %}
+# Allow the system clock to be stepped in the first three updates.
+makestep {{ clock_step_threshold if clock_step_threshold is defined else '1.0' }} 3
 
+{% endif %}
 # Enable kernel synchronization of the real-time clock (RTC).
 rtcsync
 

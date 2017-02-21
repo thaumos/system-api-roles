@@ -46,6 +46,11 @@ ptp_domains:
 # Flag enabling use of NTP servers provided by DHCP (default no)
 dhcp_ntp_servers: no
 
+# Minimum offset of the clock which can be corrected by stepping (default is
+# specific to NTP/PTP implementation: chrony 1.0, ntp 0.128, linuxptp 0.00002).
+# Zero threshold disables all steps.
+clock_step_threshold: 1.0
+
 # Minimum number of selectable time sources required to allow synchronization
 # of the clock with chronyd and ntpd (default 1)
 min_time_sources: 1

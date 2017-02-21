@@ -23,6 +23,11 @@ restrict -6 default nomodify notrap nopeer noquery
 restrict 127.0.0.1 
 restrict ::1
 
+{% if clock_step_threshold is defined %}
+# Specify the step threshold.
+tinker step {{ clock_step_threshold }}
+
+{% endif %}
 {% if min_time_sources > 1 %}
 # Increase the minimum number of selectable sources required to adjust
 # the system clock.
