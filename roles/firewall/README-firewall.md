@@ -141,3 +141,7 @@ It is also possible to use the more common syntax:
         - firewall
 
 To do only one change.
+
+# License
+
+GPLv2+

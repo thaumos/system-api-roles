@@ -91,3 +91,8 @@ This role is explained in this [roles/timesync/README.md](https://github.com/coc
 
 ### tuned
 This role is explained in this [roles/tuned/README.md](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/tuned/README.md) which includes an example playbook.
+
+## Licenses
+Ansible roles that are included in this project are individually licensed. Licensing information can be found in each role's `README.md`, under **License**.
+
+Tests are licensed under GPLv3. See `test/COPYING`.
