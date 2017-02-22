@@ -5,6 +5,7 @@ set -x
 
 prepare() {
   # install qemu because its post install script sets up /dev/kvm
+  sudo apt-get update
   sudo apt-get install -q -y qemu-system-x86
 
   sudo chmod a+rw /dev/kvm
