@@ -1,7 +1,7 @@
 
 # Ansible Role: System API
 
-Ansible role which provides the `varlink` module to roles that implement a [System API](https://github.com/cockpit-project/poc-sysmgmt-roles/wiki/System-Service-Configuration-API).
+Ansible role which provides the `system-api` module to roles that implement a [System API](https://github.com/cockpit-project/poc-sysmgmt-roles/wiki/System-Service-Configuration-API).
 
 To use it, place an `.api` file into the `api/` directory of your role. This file should contain a `Config` type, which describes all configuration values of your service. Depend on the `system-api` role by adding it to `meta/main.yml`:
 
@@ -14,7 +14,7 @@ To use it, gather configuration from default values and variables passed to your
 
 ```yaml
 - name: Gather config
-  action: varlink interface=com.example.service
+  action: system-api interface=com.example.service
   register: config
 ```
 

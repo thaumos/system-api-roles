@@ -1,6 +1,6 @@
 ---
 - name: Gather config
-  action: varlink interface=com.redhat.kdump
+  action: system-api interface=com.redhat.kdump
   register: config
 
 - name: Install kexec-tools
