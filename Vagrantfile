@@ -16,20 +16,8 @@ Vagrant.configure(2) do |config|
     # doesn't work with ansible 2.2.0
     if ARGV.include? '--provision-with'
 
-      config.vm.provision "selinux", type: "ansible" do |ansible|
-        ansible.playbook = "example-SELinux.yml"
-      end
-
-      config.vm.provision "kdump", type: "ansible" do |ansible|
-        ansible.playbook = "example-plbk-kdump.yml"
-      end
-
-      config.vm.provision "firewall", type: "ansible" do |ansible|
-        ansible.playbook = "example-firewall.yml"
-      end
-
       config.vm.provision "system-api", type: "ansible" do |ansible|
-        ansible.playbook = "example-system-api.yml"
+        ansible.playbook = "example-playbook.yml"
       end
 
     end
