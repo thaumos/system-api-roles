@@ -34,7 +34,7 @@
  *   Wether to apply sysctl from /etc after tuned's sysctl are applied.
  */
 
-com.redhat.tuned {
+com.redhat.tuned.preview {
   type Config (
     use_recommended_profile: bool = false,
     profile: string = "balanced",

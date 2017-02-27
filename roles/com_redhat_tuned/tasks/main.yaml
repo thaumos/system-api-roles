@@ -1,6 +1,6 @@
 ---
 - name: Gather config
-  action: system-api interface=com.redhat.tuned
+  action: system-api interface=com.redhat.tuned.preview
   register: config
 
 - name: Install Tuned

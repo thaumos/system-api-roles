@@ -1,7 +1,7 @@
 ---
 
 - name: Gather config
-  action: system-api interface=com.redhat.ntp
+  action: system-api interface=com.redhat.ntp.preview
   register: config
 
 - name: Install chrony

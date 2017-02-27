@@ -1,6 +1,6 @@
 ---
 - name: Gather config
-  action: system-api interface=com.redhat.kdump
+  action: system-api interface=com.redhat.kdump.preview
   register: config
 
 - name: Install kexec-tools

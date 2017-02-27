@@ -3,7 +3,7 @@
  *
  * https://github.com/cockpit-project/poc-sysmgmt-roles/wiki/System-Service-Configuration-API
  */
-com.redhat.ntp {
+com.redhat.ntp.preview {
   type NTPServer (
     hostname: string,
     minpoll: int8 = 6,
