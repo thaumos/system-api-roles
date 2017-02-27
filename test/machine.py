@@ -25,7 +25,7 @@ def run(cmd, timeout=60, env=None, log_error=True):
     return result.stdout
 
 
-class Machine:
+class Machine(object):
     def __init__(self, image, workdir, rolesdir):
         self.image = image
         self.workdir = workdir
@@ -123,6 +123,28 @@ class Machine:
         run(['ansible-playbook', '-vvv', '-i', self.inventory_file, playbook_file], env=env)
 
 
+class Localhost(Machine):
+    """
+    This class extends Machine to run tests only on localhost
+    """
+
+    def __init__(self, workdir, rolesdir):
+        self.workdir = workdir
+        self.rolesdir = rolesdir
+
+        # write an ansible inventory file for this host
+        self.inventory_file = os.path.join(workdir, 'inventory')
+        host = 'system-api-test ansible_connection=local'
+        with open(self.inventory_file, 'w') as f:
+            f.write(host)
+
+    def execute(self, command, timeout=None, log_error=False):
+        return run([command], timeout=timeout, log_error=log_error)
+
+    def terminate(self):
+        pass
+
+
 class Test(avocado.Test):
 
     """
@@ -132,14 +154,32 @@ class Test(avocado.Test):
     """
 
     def setUp(self):
+        workdir = tempfile.mkdtemp(dir=self.workdir)
+        rolesdir = os.path.join(self.basedir, '..', 'roles')
+        if self.params.get('source'):
+            self.setUpMux(workdir, rolesdir)
+        else:
+            self.setUpLocal(workdir, rolesdir)
+
+    def tearDown(self):
+        if self.params.get('source'):
+            self.tearDownMux()
+        else:
+            self.tearDownLocal()
+
+    def setUpMux(self, workdir, rolesdir):
         image = self.fetch_asset(self.params.get('source'))
-        self.machine = Machine(image,
-                               workdir=tempfile.mkdtemp(dir=self.workdir),
-                               rolesdir=os.path.join(self.basedir, '..', 'roles'))
+        self.machine = Machine(image, workdir=workdir, rolesdir=rolesdir)
 
         setup = self.params.get('setup')
         if setup:
             self.machine.execute(setup)
 
-    def tearDown(self):
+    def tearDownMux(self):
         self.machine.terminate()
+
+    def setUpLocal(self, workdir, rolesdir):
+        self.machine = Localhost(workdir, rolesdir)
+
+    def tearDownLocal(self):
+        pass

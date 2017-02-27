@@ -2,7 +2,10 @@
 CACHEDIR=$(shell pwd)/test/.image-cache
 
 all:
-	@printf "usage: make check\n       make test-shell\n       make test-container\n" >&2
+	@printf "usage:\tmake check\n\
+\tmake local-check\n\
+\tmake test-shell\n\
+\tmake test-container\n" >&2
 
 test-container:
 	docker build --tag cockpit/system-api-test test
@@ -23,3 +26,6 @@ check:
 		   --volume $(shell pwd):/system-api-test \
 		   --volume $(CACHEDIR):/cache \
 		   cockpit/system-api-test
+
+local-check:
+	avocado run test --show-job-log
