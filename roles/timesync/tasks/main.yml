@@ -14,6 +14,11 @@
     sync_mode: 3
   when: sync_mode is not defined
 
+- name: Select NTP implementation
+  set_fact:
+    ntp_implementation: "{{ 'ntp' if ansible_distribution in ['RedHat', 'CentOS'] and ansible_distribution_version|version_compare('6.8', '<') else 'chrony' }}"
+  when: sync_mode != 2 and (ntp_implementation is not defined or not ntp_implementation)
+
 - name: Install chrony
   package: name=chrony state=present
   when: sync_mode != 2 and ntp_implementation == 'chrony'

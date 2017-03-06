@@ -13,7 +13,8 @@ The variables that can be passed to this role are as follows:
 
 ```
 # Name of the NTP implementation that will be installed and configured
-# when one or more NTP servers are specified (default chrony)
+# when one or more NTP servers are specified (default ntp in RHEL < 6.8,
+# chrony otherwise)
 ntp_implementation: chrony
 
 # List of NTP servers
