@@ -19,7 +19,7 @@ ntp_implementation: chrony
 
 # List of NTP servers
 ntp_servers:
-  - name: foo.example.com       # Hostname or address of the server
+  - hostname: foo.example.com   # Hostname or address of the server
     minpoll: 4                  # Minimum polling interval (default 6)
     maxpoll: 8                  # Maximum polling interval (default 10)
     iburst: yes                 # Flag enabling fast initial synchronization
@@ -80,11 +80,11 @@ Install and configure ntp to synchronize the system clock with three NTP servers
 - hosts: targets
   vars:
     ntp_servers:
-      - name: foo.example.com
+      - hostname: foo.example.com
         iburst: yes
-      - name: bar.example.com
+      - hostname: bar.example.com
         iburst: yes
-      - name: baz.example.com
+      - hostname: baz.example.com
         iburst: yes
     ntp_implementation: ntp
   roles:
@@ -112,11 +112,11 @@ synchronization:
 - hosts: targets
   vars:
     ntp_servers:
-      - name: foo.example.com
+      - hostname: foo.example.com
         maxpoll: 6
-      - name: bar.example.com
+      - hostname: bar.example.com
         maxpoll: 6
-      - name: baz.example.com
+      - hostname: baz.example.com
         maxpoll: 6
     ptp_domains:
       - number: 0

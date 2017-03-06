@@ -11,7 +11,7 @@
  * ntp_servers:
  *   List of NTP servers.
  *
- *   name:
+ *   hostname:
  *     Hostname or IP address of the NTP server.
  *   minpoll:
  *     Minimum polling interval as a power of 2 (e.g. 6 for 64 seconds).
@@ -70,7 +70,7 @@
  */
 com.redhat.timesync.preview {
   type NTPServer (
-    name: string,
+    hostname: string,
     minpoll: int8 = 6,
     maxpoll: int8 = 10,
     iburst: bool = true,
