@@ -64,6 +64,11 @@ ntp_extra_conf: |
 # Extra options that will be added to ptp4l.conf (optional)
 ptp4l_extra_conf: |
   logging_level 7
+
+# Extra options that will be added to timemaster.conf (optional)
+timemaster_extra_conf: |
+  [phc2sys]
+  options -l 5
 ```
 
 Example Playbook
