@@ -1,13 +1,17 @@
 ---
+- name: Gather config
+  action: system-api interface=com.redhat.timesync.preview
+  register: conf
+
 - name: Check if only NTP is needed
   set_fact:
     sync_mode: 1
-  when: ptp_domains is not defined or ptp_domains|length == 0
+  when: conf.ptp_domains|length == 0
 
 - name: Check if single PTP is needed
   set_fact:
     sync_mode: 2
-  when: sync_mode is not defined and (ntp_servers is not defined or ntp_servers|length == 0) and ptp_domains|length == 1 and ptp_domains[0].interfaces|length == 1
+  when: sync_mode is not defined and (conf.ntp_servers|length == 0) and conf.ptp_domains|length == 1 and conf.ptp_domains[0].interfaces|length == 1
 
 - name: Check if both NTP and PTP are needed
   set_fact:
@@ -16,8 +20,8 @@
 
 - name: Select NTP implementation
   set_fact:
-    ntp_implementation: "{{ 'ntp' if ansible_distribution in ['RedHat', 'CentOS'] and ansible_distribution_version|version_compare('6.8', '<') else 'chrony' }}"
-  when: sync_mode != 2 and (ntp_implementation is not defined or not ntp_implementation)
+    ntp_implementation: "{{ conf.ntp_implementation if conf.ntp_implementation else 'ntp' if ansible_distribution in ['RedHat', 'CentOS'] and ansible_distribution_version|version_compare('6.8', '<') else 'chrony' }}"
+  when: sync_mode != 2
 
 - name: Install chrony
   package: name=chrony state=present
@@ -32,7 +36,7 @@
   when: sync_mode != 1
 
 - name: Run phc_ctl on PTP interface
-  command: phc_ctl -q {{ ptp_domains[0].interfaces[0] }}
+  command: phc_ctl -q {{ conf.ptp_domains[0].interfaces[0] }}
   register: phc_ctl_output
   when: sync_mode == 2
   ignore_errors: yes
@@ -103,7 +107,7 @@
     mode: 0644
     regexp: '^PEERNTP='
     line: 'PEERNTP=no'
-    state: "{{ 'absent' if dhcp_ntp_servers else 'present' }}"
+    state: "{{ 'absent' if conf.dhcp_ntp_servers else 'present' }}"
   notify: restart {{ ntp_implementation + 'd' }}
   when: sync_mode == 1
 

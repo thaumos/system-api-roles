@@ -2,18 +2,15 @@
 
 [global]
 slaveOnly		1
-domainNumber		{{ ptp_domains[0].number }}
+domainNumber		{{ conf.ptp_domains[0].number }}
 time_stamping		{{ 'hardware' if mode2_hwts else 'software' }}
-{% if 'transport' in ptp_domains[0] %}
-network_transport	{{ ptp_domains[0]['transport'] }}
+{% if conf.ptp_domains[0]['transport'] %}
+network_transport	{{ conf.ptp_domains[0]['transport'] }}
 {% endif %}
-{% if 'udp_ttl' in ptp_domains[0] %}
-udp_ttl			{{ ptp_domains[0]['udp_ttl'] }}
+{% if conf.ptp_domains[0]['udp_ttl'] > 1 %}
+udp_ttl			{{ conf.ptp_domains[0]['udp_ttl'] }}
 {% endif %}
-{% if not mode2_hwts and clock_step_threshold is defined %}
-first_step_threshold	{{ clock_step_threshold }}
+{% if not mode2_hwts and conf.clock_step_threshold >= 0.0 %}
+first_step_threshold	{{ conf.clock_step_threshold }}
 {% endif %}
-
-{% if ptp4l_extra_conf is defined %}
-{{ ptp4l_extra_conf }}
-{% endif %}
+{{ conf.ptp4l_extra_conf }}

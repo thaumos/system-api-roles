@@ -1,19 +1,19 @@
 # {{ ansible_managed }}
 
-{% for value in ptp_domains %}
+{% for value in conf.ptp_domains %}
 [ptp_domain {{ value['number'] }}]
 interfaces {{ value['interfaces']|join(' ') }}
-{% if 'delay' in value %}
+{% if value['delay'] >= 0.0 %}
 delay {{ value['delay'] }}
 {% endif %}
-{% if 'transport' in value %}
+{% if value['transport'] %}
 ptp4l_option network_transport {{ value['transport'] }}
 {% endif %}
-{% if 'udp_ttl' in value %}
+{% if value['udp_ttl'] > 1 %}
 ptp4l_option udp_ttl {{ value['udp_ttl'] }}
 {% endif %}
-{% endfor %}
 
+{% endfor %}
 [timemaster]
 ntp_program {{ 'ntpd' if ntp_implementation == 'ntp' else 'chronyd' }}
 
@@ -24,9 +24,7 @@ include /etc/chrony.conf
 includefile /etc/ntp.conf
 
 [ptp4l.conf]
-{% if ptp4l_extra_conf is defined %}
-{{ ptp4l_extra_conf }}
-{% endif %}
+{{ conf.ptp4l_extra_conf }}
 
 [chronyd]
 path /usr/sbin/chronyd
@@ -46,6 +44,4 @@ options -l 6
 path /usr/sbin/ptp4l
 options -l 6
 
-{% if timemaster_extra_conf is defined %}
-{{ timemaster_extra_conf }}
-{% endif %}
+{{ conf.timemaster_extra_conf }}
