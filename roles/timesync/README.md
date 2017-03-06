@@ -16,10 +16,6 @@ The variables that can be passed to this role are as follows:
 # when one or more NTP servers are specified (default chrony)
 ntp_implementation: chrony
 
-# Name of the PTP implementation that will be installed and configured
-# when one or more PTP domains are specified (default linuxptp)
-ptp_implementation: linuxptp
-
 # List of NTP servers
 ntp_servers:
   - name: foo.example.com       # Hostname or address of the server

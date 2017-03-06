@@ -24,18 +24,18 @@
 
 - name: Install linuxptp
   package: name=linuxptp state=present
-  when: sync_mode != 1 and ptp_implementation == 'linuxptp'
+  when: sync_mode != 1
 
 - name: Run phc_ctl on PTP interface
   command: phc_ctl -q {{ ptp_domains[0].interfaces[0] }}
   register: phc_ctl_output
-  when: sync_mode == 2 and ptp_implementation == 'linuxptp'
+  when: sync_mode == 2
   ignore_errors: yes
 
 - name: Check if PTP interface supports HW timestamping
   set_fact:
     mode2_hwts: "{{ phc_ctl_output.rc == 0 }}"
-  when: sync_mode == 2 and ptp_implementation == 'linuxptp'
+  when: sync_mode == 2
 
 - name: Get chrony version
   command: rpm -q --qf '%{version}' chrony
@@ -74,17 +74,17 @@
 - name: Generate ptp4l.conf file
   template: src=ptp4l.conf.j2 dest=/etc/ptp4l.conf backup=yes mode=0644
   notify: restart ptp4l
-  when: sync_mode == 2 and ptp_implementation == 'linuxptp'
+  when: sync_mode == 2
 
 - name: Generate ptp4l sysconfig file
   template: src=ptp4l.sysconfig.j2 dest=/etc/sysconfig/ptp4l backup=yes mode=0644
   notify: restart ptp4l
-  when: sync_mode == 2 and ptp_implementation == 'linuxptp'
+  when: sync_mode == 2
 
 - name: Generate phc2sys sysconfig file
   template: src=phc2sys.sysconfig.j2 dest=/etc/sysconfig/phc2sys backup=yes mode=0644
   notify: restart phc2sys
-  when: sync_mode == 2 and ptp_implementation == 'linuxptp' and mode2_hwts
+  when: sync_mode == 2 and mode2_hwts
 
 - name: Generate timemaster.conf file
   template: src=timemaster.conf.j2 dest=/etc/timemaster.conf backup=yes mode=0644
@@ -122,12 +122,12 @@
 
 - name: Disable ptp4l
   service: name=ptp4l state=stopped enabled=no
-  when: sync_mode != 2 or ptp_implementation != 'linuxptp'
+  when: sync_mode != 2
   ignore_errors: yes
 
 - name: Disable phc2sys
   service: name=phc2sys state=stopped enabled=no
-  when: sync_mode != 2 or ptp_implementation != 'linuxptp' or not mode2_hwts
+  when: sync_mode != 2 or not mode2_hwts
   ignore_errors: yes
 
 - name: Disable timemaster
@@ -145,11 +145,11 @@
 
 - name: Enable ptp4l
   service: name=ptp4l state=started enabled=yes
-  when: sync_mode == 2 and ptp_implementation == 'linuxptp'
+  when: sync_mode == 2
 
 - name: Enable phc2sys
   service: name=phc2sys state=started enabled=yes
-  when: sync_mode == 2 and ptp_implementation == 'linuxptp' and mode2_hwts
+  when: sync_mode == 2 and mode2_hwts
 
 - name: Enable timemaster
   service: name=timemaster state=started enabled=yes
