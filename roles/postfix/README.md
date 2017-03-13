@@ -16,7 +16,6 @@ Example Playbook
 -----------------
 
 Install and enable postfix. Configure "relay_domains=$mydestination" and
-"relay_host=example.com":
 
 ```
 ---
@@ -36,8 +35,36 @@ postfix:
 ---
 - hosts: all
   vars:
-    
     postfix_check: false
+  roles:
+    - postfix
+```
+
+Install and enable postfix. Do single backup of main.cf (older backup will be
+rewritten) and configure "relay_host=example.com":
+
+```
+---
+- hosts: all
+  vars:
+    postfix_conf:
+      relay_host: "example.com"
+    postfix_backup: true
+  roles:
+    - postfix
+```
+
+Install and enable postfix. Do timestamped backup of main.cf and
+configure "relay_host=example.com" (if postfix_backup_multiple is
+set to true postfix_backup is ignored):
+
+```
+---
+- hosts: all
+  vars:
+    postfix_conf:
+      relay_host: "example.com"
+    postfix_backup_multiple: true
   roles:
     - postfix
 ```

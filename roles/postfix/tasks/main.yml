@@ -5,7 +5,11 @@
 - name: Enable Postfix
   service: name=postfix state=started enabled=yes
 
-- name: Configure Postfix 
+- name: Backup configuration
+  shell: cp /etc/postfix/main.cf /etc/postfix/main.cf.{{ postfix_backup_multiple | ternary("`date -Iseconds`", "backup") }}
+  when: postfix_backup or postfix_backup_multiple
+
+- name: Configure Postfix
   command: "postconf -e \"{{ item.key }}={{ item.value }}\""
   ignore_errors: true
   notify: check restart postfix
