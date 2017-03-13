@@ -3,14 +3,14 @@
 # postfix_conf:
 #   relay_domains: "$mydestination"
 #   relay_host: "example.com"
-#  
+#
 postfix_conf: {}
 
 # Whether to run 'postfix check' before it's started
 postfix_check: true
 
 # Whether to make backup of current config
-postfix_backup: true
+postfix_backup: false
 
 # Whether to do multiple backups with timestamp (if true) or
 # single backup (if false and postfix_backup == true)
