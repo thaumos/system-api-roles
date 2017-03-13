@@ -5,3 +5,6 @@
 #   relay_host: "example.com"
 #  
 postfix_conf: {}
+
+# Whether to run 'postfix check' before it's started
+postfix_check: true

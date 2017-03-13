@@ -29,6 +29,19 @@ Install and enable postfix. Configure "relay_domains=$mydestination" and
     - postfix
 ```
 
+Install and enable postfix. Do not run 'postfix check' before restarting
+postfix:
+
+```
+---
+- hosts: all
+  vars:
+    
+    postfix_check: false
+  roles:
+    - postfix
+```
+
 
 License
 -------

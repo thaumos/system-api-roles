@@ -8,5 +8,5 @@
 - name: Configure Postfix 
   command: "postconf -e \"{{ item.key }}={{ item.value }}\""
   ignore_errors: true
-  notify: restart postfix
+  notify: check restart postfix
   with_dict: "{{ postfix_conf }}"
