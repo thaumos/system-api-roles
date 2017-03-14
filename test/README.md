@@ -35,3 +35,13 @@ To run a single test, replace the `test` by the test program you want to run.
 To build the test container itself, run
 
     $ sudo make test-container
+
+There is also possible to execute integration tests directly on a SUT without
+using container and virtual machine.
+
+To run tests locally:
+
+    $ sudo make check-local
+
+Please be aware, this command may break your environment, do not execute this
+on your workstation.
