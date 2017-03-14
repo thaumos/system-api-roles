@@ -26,10 +26,44 @@ def run(cmd, timeout=60, env=None, log_error=True):
 
 
 class Machine(object):
-    def __init__(self, image, workdir, rolesdir):
-        self.image = image
+    """
+    This is a generic machine class
+    """
+    def __init__(self, workdir, rolesdir):
         self.workdir = workdir
         self.rolesdir = rolesdir
+        self.inventory_file = None
+
+    def create_inventory_file(self, host):
+        # write an ansible inventory file for this host
+        self.inventory_file = os.path.join(self.workdir, 'inventory')
+        with open(self.inventory_file, 'w') as f:
+            f.write(host)
+
+    def set_config(self, interface, **config):
+        play = {
+                'hosts': 'system-api-test',
+                'become': True,
+                'roles': [ dict(role=interface.replace('.', '_'), **config) ]
+        }
+        playbook = [ play ]
+
+        playbook_file = os.path.join(self.workdir, 'test.yml')
+        with open(playbook_file, 'w') as f:
+            f.write(yaml.dump(playbook))
+
+        env = dict(ANSIBLE_ROLES_PATH=self.rolesdir, **os.environ)
+
+        run(['ansible-playbook', '-vvv', '-i', self.inventory_file, playbook_file], env=env)
+
+
+class Virtualhost(Machine):
+    """
+    This class prepares virtual machine as SUT
+    """
+    def __init__(self, image, workdir, rolesdir):
+        super(Virtualhost, self).__init__(workdir, rolesdir)
+        self.image = image
 
         self.identity = os.path.join(self.workdir, 'id_rsa')
         run(['ssh-keygen', '-q', '-f', self.identity, '-N', ''])
@@ -82,8 +116,6 @@ class Machine(object):
             self.terminate()
             raise Exception('error connecting to the machine')
 
-        # write an ansible inventory file for this host
-        self.inventory_file = os.path.join(workdir, 'inventory')
         host = ('system-api-test'
                 ' ansible_host=localhost'
                 ' ansible_port=2222'
@@ -91,8 +123,7 @@ class Machine(object):
                 ' ansible_ssh_private_key_file="%s"'
                 ' ansible_ssh_extra_args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
                 % self.identity)
-        with open(self.inventory_file, 'w') as f:
-            f.write(host)
+        self.create_inventory_file(host)
 
     def execute(self, command, timeout=None, log_error=False):
         return run(['ssh', '-o', 'IdentityFile=' + self.identity,
@@ -106,47 +137,22 @@ class Machine(object):
         self.qemu.terminate()
         self.qemu.wait()
 
-    def set_config(self, interface, **config):
-        play = {
-                'hosts': 'system-api-test',
-                'become': True,
-                'roles': [ dict(role=interface.replace('.', '_'), **config) ]
-        }
-        playbook = [ play ]
-
-        playbook_file = os.path.join(self.workdir, 'test.yml')
-        with open(playbook_file, 'w') as f:
-            f.write(yaml.dump(playbook))
-
-        env = dict(ANSIBLE_ROLES_PATH=self.rolesdir, **os.environ)
-
-        run(['ansible-playbook', '-vvv', '-i', self.inventory_file, playbook_file], env=env)
-
 
 class Localhost(Machine):
     """
-    This class extends Machine to run tests only on localhost
+    This class extends Machine to be able to run tests only on localhost
     """
 
     def __init__(self, workdir, rolesdir):
-        self.workdir = workdir
-        self.rolesdir = rolesdir
-
-        # write an ansible inventory file for this host
-        self.inventory_file = os.path.join(workdir, 'inventory')
+        super(Localhost, self).__init__(workdir, rolesdir)
         host = 'system-api-test ansible_connection=local'
-        with open(self.inventory_file, 'w') as f:
-            f.write(host)
+        self.create_inventory_file(host)
 
     def execute(self, command, timeout=None, log_error=False):
-        return run([command], timeout=timeout, log_error=log_error)
-
-    def terminate(self):
-        pass
+        return run(command, timeout=timeout, log_error=log_error)
 
 
 class Test(avocado.Test):
-
     """
     Base class for integration tests.
 
@@ -169,7 +175,7 @@ class Test(avocado.Test):
 
     def setUpMux(self, workdir, rolesdir):
         image = self.fetch_asset(self.params.get('source'))
-        self.machine = Machine(image, workdir=workdir, rolesdir=rolesdir)
+        self.machine = Virtualhost(image, workdir=workdir, rolesdir=rolesdir)
 
         setup = self.params.get('setup')
         if setup:
