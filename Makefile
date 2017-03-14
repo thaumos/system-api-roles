@@ -27,5 +27,5 @@ check:
 		   --volume $(CACHEDIR):/cache \
 		   cockpit/system-api-test
 
-local-check:
-	avocado run test --show-job-log
+check-local:
+	avocado run test/test-*.py --show-job-log
