@@ -25,4 +25,3 @@ class TestTuned(machine.Test):
     def get_active_profile(self):
         output = self.machine.execute('sudo tuned-adm active')
         return re.match('^.*: (.*)$', output).group(1)
-
