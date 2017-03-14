@@ -64,10 +64,24 @@ class Virtualhost(Machine):
     def __init__(self, image, workdir, rolesdir):
         super(Virtualhost, self).__init__(workdir, rolesdir)
         self.image = image
+        self.qemu = None
 
         self.identity = os.path.join(self.workdir, 'id_rsa')
         run(['ssh-keygen', '-q', '-f', self.identity, '-N', ''])
 
+        cloudinit_iso = self.create_cloudinit_iso()
+        self.start_vm(cloudinit_iso)
+
+        host = ('system-api-test'
+                ' ansible_host=localhost'
+                ' ansible_port=2222'
+                ' ansible_user=admin'
+                ' ansible_ssh_private_key_file="%s"'
+                ' ansible_ssh_extra_args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
+                % self.identity)
+        self.create_inventory_file(host)
+
+    def create_cloudinit_iso(self):
         with open(os.path.join(self.workdir, 'meta-data'), 'w') as f:
             f.write('instance-id: nocloud\n')
             f.write('local-hostname: system-api-test\n')
@@ -82,14 +96,16 @@ class Virtualhost(Machine):
             f.write('ssh_authorized_keys:\n')
             f.write('  - ' + open(self.identity + '.pub', 'r').read())
 
-        cloudinit_iso = os.path.join(workdir, 'cloud-init.iso')
+        cloudinit_iso = os.path.join(self.workdir, 'cloud-init.iso')
         run(['genisoimage', '-input-charset', 'utf-8',
                             '-output', cloudinit_iso,
                             '-volid', 'cidata',
                             '-joliet', '-rock', '-quiet',
-                            os.path.join(workdir, 'user-data'),
-                            os.path.join(workdir, 'meta-data')])
+                            os.path.join(self.workdir, 'user-data'),
+                            os.path.join(self.workdir, 'meta-data')])
+        return cloudinit_iso
 
+    def start_vm(self, cloudinit_iso):
         argv = ['qemu-system-x86_64',
                 '-m', '1024',
                 self.image,
@@ -116,15 +132,6 @@ class Virtualhost(Machine):
             self.terminate()
             raise Exception('error connecting to the machine')
 
-        host = ('system-api-test'
-                ' ansible_host=localhost'
-                ' ansible_port=2222'
-                ' ansible_user=admin'
-                ' ansible_ssh_private_key_file="%s"'
-                ' ansible_ssh_extra_args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
-                % self.identity)
-        self.create_inventory_file(host)
-
     def execute(self, command, timeout=None, log_error=False):
         return run(['ssh', '-o', 'IdentityFile=' + self.identity,
                            '-o', 'StrictHostKeyChecking=no',
@@ -148,7 +155,8 @@ class Localhost(Machine):
         host = 'system-api-test ansible_connection=local'
         self.create_inventory_file(host)
 
-    def execute(self, command, timeout=None, log_error=False):
+    @staticmethod
+    def execute(command, timeout=None, log_error=False):
         return run(command, timeout=timeout, log_error=log_error)
 
 
