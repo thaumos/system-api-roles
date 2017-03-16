@@ -85,9 +85,6 @@ This will provision LVM, filesystem, mount and user ownership of disks.  Modules
 ### Timesync
 This role is explained in this [roles/timesync/README.md](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/timesync/README.md) which includes example playbooks.
 
-### tuned
-This role is explained in this [roles/tuned/README.md](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/tuned/README.md) which includes an example playbook.
-
 ## Licenses
 Ansible roles that are included in this project are individually licensed. Licensing information can be found in each role's `README.md`, under **License**.
 
