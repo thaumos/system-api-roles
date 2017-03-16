@@ -12,7 +12,6 @@ described in the ```api/``` directory and an ```example-system-api.yml``` playbo
 that calls it.
 
 ### Current subsystems
-- Kernel crash dump
 - Networking
 - Red Hat Subscription Manager
 - SELinux
@@ -61,9 +60,6 @@ If using the optional Red Hat Subscription Manager example role, you will probab
 
 ### Supported Platform Check
 This role can be used by other roles using the `include_role` directive to help ensure that the minimum supported platform requirements are met.  It is really nothing more than a predefined set of conditional tasks.
-
-### Kernel Crash Dump
-This role is explained in [roles/Kernel-Crash-Dump/README.md](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/Kernel-Crash-Dump/README.md) and demonstrated in [roles/Kernel-Crash-Dump/example-playbook.yml](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/Kernel-Crash-Dump/example-playbook.yml).
 
 ### Networking
 This module and role has not yet been merged into this repository and can instead be found at <https://github.com/NetworkManager/ansible-network-role>.
