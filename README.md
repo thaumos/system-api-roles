@@ -17,13 +17,6 @@ that calls it.
 - SELinux
 - Timesync
 
-### Future subsystems
-- DNS
-- Firewall
-- Storage
-- SystemLog
-- more to come...
-
 ### Vagrant
 
 You can use [vagrant](http://vagrantup.com) to quickly test roles in this repository. The Vagrantfile in this repository defines [multiple machines](https://www.vagrantup.com/docs/multi-machine/) (for now `fedora` and `centos`) and runs all `vagrant` commands on all of them by default. To run the example playbook on one machine, use
