@@ -10,15 +10,7 @@ Vagrant.configure(2) do |config|
       centos.vm.provision "shell", inline: "yum install -y python2 libselinux-python"
     end
 
-    # Optional provisioners
-    #
-    # check for '--provision-with' argument manually because "run: 'never'"
-    # doesn't work with ansible 2.2.0
-    if ARGV.include? '--provision-with'
-
-      config.vm.provision "system-api", type: "ansible" do |ansible|
-        ansible.playbook = "example-playbook.yml"
-      end
-
+    config.vm.provision "system-api", type: "ansible" do |ansible|
+      ansible.playbook = "example-playbook.yml"
     end
 end

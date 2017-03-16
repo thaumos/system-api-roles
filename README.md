@@ -24,26 +24,15 @@ that calls it.
 - SystemLog
 - more to come...
 
-## Usage
-
-## Configuration
-Current testing and development is primarily on RHEL/CentOS/Fedora applying the playbooks against KVM virtual machines.
-
 ### Vagrant
 
-You can use [vagrant](http://vagrantup.com) to quickly test the example playbooks. The Vagrantfile in this repository defines [multiple machines](https://www.vagrantup.com/docs/multi-machine/) (for now `fedora` and `centos`) and runs all `vagrant` commands on all of them by default. To only run one machine, use
+You can use [vagrant](http://vagrantup.com) to quickly test roles in this repository. The Vagrantfile in this repository defines [multiple machines](https://www.vagrantup.com/docs/multi-machine/) (for now `fedora` and `centos`) and runs all `vagrant` commands on all of them by default. To run the example playbook on one machine, use
 
 ```shell
 vagrant up MACHINE
 ```
 
-None of the playbooks are run when creating and starting the VM with `vagrant up`. Instead, you can run then manually with
-
-```shell
-vagrant provision [MACHINE] --provision-with NAME
-```
-
-Where `NAME` is one of `selinux`, `kdump`, `system-api`, etc.
+Use `vagrant provision` to run the example playbook against an already-running machine.
 
 ## Specific non-API roles
 
