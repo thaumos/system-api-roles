@@ -3,11 +3,6 @@
  *
  * https://github.com/cockpit-project/poc-sysmgmt-roles/wiki/System-Service-Configuration-API
  *
- * ntp_implementation:
- *   Name of the NTP implementation that will be installed and configured when
- *   needed. Supported are "chrony" and "ntp". If null, the implementation will
- *   be selected automatically (ntp on RHEL versions before 6.8, else chrony).
- *
  * ntp_servers:
  *   List of NTP servers.
  *
@@ -53,20 +48,8 @@
  *
  * min_time_sources:
  *   Minimum number of selectable time sources required to allow
- *   synchronization of the clock with chronyd and ntpd. Increasing the
- *   value may improve reliability.
- *
- * chrony_extra_conf:
- *   Extra options which will be added to the chronyd configuration file.
- *
- * ntp_extra_conf:
- *   Extra options which will be added to the ntpd configuration file.
- *
- * ptp4l_extra_conf:
- *   Extra options which will be added to the ptp4l configuration file.
- *
- * timemaster_extra_conf:
- *   Extra options which will be added to the timemaster configuration file.
+ *   synchronization of the clock. Increasing the value may improve
+ *   reliability.
  */
 com.redhat.timesync.preview {
   type NTPServer (
@@ -86,15 +69,10 @@ com.redhat.timesync.preview {
   )
 
   type Config (
-    ntp_implementation: string,
     ntp_servers: NTPServer[],
     ptp_domains: PTPDomain[],
     dhcp_ntp_servers: bool = false,
     clock_step_threshold: float64 = -1.0,
-    min_time_sources: uint32 = 1,
-    chrony_extra_conf: string,
-    ntp_extra_conf: string,
-    ptp4l_extra_conf: string,
-    timemaster_extra_conf: string
+    min_time_sources: uint32 = 1
   )
 }

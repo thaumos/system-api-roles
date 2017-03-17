@@ -20,7 +20,7 @@
 
 - name: Select NTP implementation
   set_fact:
-    ntp_implementation: "{{ conf.ntp_implementation if conf.ntp_implementation else 'ntp' if ansible_distribution in ['RedHat', 'CentOS'] and ansible_distribution_version|version_compare('6.8', '<') else 'chrony' }}"
+    ntp_implementation: "{{ 'ntp' if ansible_distribution in ['RedHat', 'CentOS'] and ansible_distribution_version|version_compare('6.8', '<') else 'chrony' }}"
   when: sync_mode != 2
 
 - name: Install chrony

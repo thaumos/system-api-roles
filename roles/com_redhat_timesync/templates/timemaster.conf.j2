@@ -24,7 +24,6 @@ include /etc/chrony.conf
 includefile /etc/ntp.conf
 
 [ptp4l.conf]
-{{ conf.ptp4l_extra_conf }}
 
 [chronyd]
 path /usr/sbin/chronyd
@@ -43,5 +42,3 @@ options -l 6
 [ptp4l]
 path /usr/sbin/ptp4l
 options -l 6
-
-{{ conf.timemaster_extra_conf }}

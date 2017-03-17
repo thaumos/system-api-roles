@@ -12,11 +12,6 @@ Role Variables
 The variables that can be passed to this role are as follows:
 
 ```
-# Name of the NTP implementation that will be installed and configured
-# when one or more NTP servers are specified (default ntp in RHEL < 6.8,
-# chrony otherwise)
-ntp_implementation: chrony
-
 # List of NTP servers
 ntp_servers:
   - hostname: foo.example.com   # Hostname or address of the server
@@ -49,26 +44,8 @@ dhcp_ntp_servers: no
 clock_step_threshold: 1.0
 
 # Minimum number of selectable time sources required to allow synchronization
-# of the clock with chronyd and ntpd (default 1)
+# of the clock (default 1)
 min_time_sources: 1
-
-# Extra options that will be added to chrony.conf (optional)
-chrony_extra_conf: |
-  logdir /var/log/chrony
-  log statistics
-
-# Extra options that will be added to ntp.conf (optional)
-ntp_extra_conf: |
-  statistics loopstats peerstats
-
-# Extra options that will be added to ptp4l.conf (optional)
-ptp4l_extra_conf: |
-  logging_level 7
-
-# Extra options that will be added to timemaster.conf (optional)
-timemaster_extra_conf: |
-  [phc2sys]
-  options -l 5
 ```
 
 Example Playbook
@@ -86,7 +63,6 @@ Install and configure ntp to synchronize the system clock with three NTP servers
         iburst: yes
       - hostname: baz.example.com
         iburst: yes
-    ntp_implementation: ntp
   roles:
     - com_redhat_timesync
 ```
@@ -127,9 +103,6 @@ synchronization:
         interfaces: [ eth2 ]
         transport: UDPv4
         delay: 0.000010
-    chrony_extra_conf: |
-      logdir /var/log/chrony
-      log tracking
   roles:
     - com_redhat_timesync
 ```

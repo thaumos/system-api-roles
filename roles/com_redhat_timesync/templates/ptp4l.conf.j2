@@ -13,4 +13,3 @@ udp_ttl			{{ conf.ptp_domains[0]['udp_ttl'] }}
 {% if not mode2_hwts and conf.clock_step_threshold >= 0.0 %}
 first_step_threshold	{{ conf.clock_step_threshold }}
 {% endif %}
-{{ conf.ptp4l_extra_conf }}
