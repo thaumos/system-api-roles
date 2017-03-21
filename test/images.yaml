@@ -11,4 +11,4 @@ centos-6:
   source: https://cloud.centos.org/centos/6/images/CentOS-6-x86_64-GenericCloud-1702.qcow2c
 
 centos-7:
-  source: http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1611.qcow2c
+  source: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1702.qcow2c
