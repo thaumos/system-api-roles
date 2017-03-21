@@ -1,0 +1,78 @@
+/*
+ * API for configuring synchronization of the system clock.
+ *
+ * https://github.com/cockpit-project/poc-sysmgmt-roles/wiki/System-Service-Configuration-API
+ *
+ * ntp_servers:
+ *   List of NTP servers.
+ *
+ *   hostname:
+ *     Hostname or IP address of the NTP server.
+ *   minpoll:
+ *     Minimum polling interval as a power of 2 (e.g. 6 for 64 seconds).
+ *   maxpoll:
+ *     Maximum polling interval as a power of 2 (e.g. 10 for 1024 seconds).
+ *   iburst:
+ *     Flag enabling faster polling on start.
+ *   pool:
+ *     Flag indicating that the hostname is expected to resolve to addresses of
+ *     multiple NTP servers and each address should be used as a separate
+ *     source.
+ *
+ * ptp_domains:
+ *   List of PTP domains.
+ *
+ *   number:
+ *     PTP domain number.
+ *   interfaces:
+ *     List of network interfaces in the domain.
+ *   delay:
+ *     Assumed maximum network delay to the grandmaster (in seconds). It is
+ *     needed when other PTP domains or NTP servers are specified. If negative,
+ *     a default value will be used instead.
+ *   transport:
+ *     Network transport of PTP messages. Possible values are "UDPv4", "UDPv6",
+ *     and "L2".
+ *   udp_ttl:
+ *     Time to live or hop limit for PTP messages using the UDPv4 or UDPv6
+ *     network transport.
+ *
+ * dhcp_ntp_servers:
+ *   Flag enabling use of NTP servers provided by DHCP.
+ *
+ * clock_step_threshold:
+ *   Minimum offset of the clock which can be corrected by stepping (in
+ *   seconds). If negative, a default value specific to the NTP/PTP
+ *   implementation will be used instead (chrony: 1.0, ntp: 0.128,
+ *   linuxptp: 0.00002).
+ *
+ * min_time_sources:
+ *   Minimum number of selectable time sources required to allow
+ *   synchronization of the clock. Increasing the value may improve
+ *   reliability.
+ */
+com.redhat.timesync.preview {
+  type NTPServer (
+    hostname: string,
+    minpoll: int8 = 6,
+    maxpoll: int8 = 10,
+    iburst: bool = true,
+    pool: bool = false
+  )
+
+  type PTPDomain (
+    number: uint8,
+    interfaces: string[],
+    delay: float64 = -1.0,
+    transport: string = "UDPv4",
+    udp_ttl: uint8 = 1
+  )
+
+  type Config (
+    ntp_servers: NTPServer[],
+    ptp_domains: PTPDomain[],
+    dhcp_ntp_servers: bool = false,
+    clock_step_threshold: float64 = -1.0,
+    min_time_sources: uint32 = 1
+  )
+}

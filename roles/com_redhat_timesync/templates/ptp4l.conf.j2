@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+
+[global]
+slaveOnly		1
+domainNumber		{{ conf.ptp_domains[0].number }}
+time_stamping		{{ 'hardware' if mode2_hwts else 'software' }}
+{% if conf.ptp_domains[0]['transport'] %}
+network_transport	{{ conf.ptp_domains[0]['transport'] }}
+{% endif %}
+{% if conf.ptp_domains[0]['udp_ttl'] > 1 %}
+udp_ttl			{{ conf.ptp_domains[0]['udp_ttl'] }}
+{% endif %}
+{% if not mode2_hwts and conf.clock_step_threshold >= 0.0 %}
+first_step_threshold	{{ conf.clock_step_threshold }}
+{% endif %}

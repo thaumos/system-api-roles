@@ -1,5 +1,5 @@
-timesync
-========
+com_redhat_timesync
+===================
 
 This role installs and configures an NTP and/or PTP implementation to operate
 as an NTP client and/or PTP slave in order to synchronize the system clock with
@@ -12,17 +12,9 @@ Role Variables
 The variables that can be passed to this role are as follows:
 
 ```
-# Name of the NTP implementation that will be installed and configured
-# when one or more NTP servers are specified (default chrony)
-ntp_implementation: chrony
-
-# Name of the PTP implementation that will be installed and configured
-# when one or more PTP domains are specified (default linuxptp)
-ptp_implementation: linuxptp
-
 # List of NTP servers
 ntp_servers:
-  - name: foo.example.com       # Hostname or address of the server
+  - hostname: foo.example.com   # Hostname or address of the server
     minpoll: 4                  # Minimum polling interval (default 6)
     maxpoll: 8                  # Maximum polling interval (default 10)
     iburst: yes                 # Flag enabling fast initial synchronization
@@ -43,18 +35,17 @@ ptp_domains:
     udp_ttl: 1                  # TTL for UDPv4 and UDPv6 transports
                                 # (default 1)
 
-# Extra options that will be added to chrony.conf (optional)
-chrony_extra_conf: |
-  logdir /var/log/chrony
-  log statistics
+# Flag enabling use of NTP servers provided by DHCP (default no)
+dhcp_ntp_servers: no
 
-# Extra options that will be added to ntp.conf (optional)
-ntp_extra_conf: |
-  statistics loopstats peerstats
+# Minimum offset of the clock which can be corrected by stepping (default is
+# specific to NTP/PTP implementation: chrony 1.0, ntp 0.128, linuxptp 0.00002).
+# Zero threshold disables all steps.
+clock_step_threshold: 1.0
 
-# Extra options that will be added to ptp4l.conf (optional)
-ptp4l_extra_conf: |
-  logging_level 7
+# Minimum number of selectable time sources required to allow synchronization
+# of the clock (default 1)
+min_time_sources: 1
 ```
 
 Example Playbook
@@ -66,15 +57,14 @@ Install and configure ntp to synchronize the system clock with three NTP servers
 - hosts: targets
   vars:
     ntp_servers:
-      - name: foo.example.com
+      - hostname: foo.example.com
         iburst: yes
-      - name: bar.example.com
+      - hostname: bar.example.com
         iburst: yes
-      - name: baz.example.com
+      - hostname: baz.example.com
         iburst: yes
-    ntp_implementation: ntp
   roles:
-    - timesync
+    - com_redhat_timesync
 ```
 
 Install and configure linuxptp to synchronize the system clock with a
@@ -87,7 +77,7 @@ grandmaster in PTP domain number 0, which is accessible on interface eth0:
       - number: 0
         interfaces: [ eth0 ]
   roles:
-    - timesync
+    - com_redhat_timesync
 ```
 
 Install and configure chrony and linuxptp to synchronize the system clock with
@@ -98,11 +88,11 @@ synchronization:
 - hosts: targets
   vars:
     ntp_servers:
-      - name: foo.example.com
+      - hostname: foo.example.com
         maxpoll: 6
-      - name: bar.example.com
+      - hostname: bar.example.com
         maxpoll: 6
-      - name: baz.example.com
+      - hostname: baz.example.com
         maxpoll: 6
     ptp_domains:
       - number: 0
@@ -113,9 +103,6 @@ synchronization:
         interfaces: [ eth2 ]
         transport: UDPv4
         delay: 0.000010
-    chrony_extra_conf: |
-      logdir /var/log/chrony
-      log tracking
   roles:
-    - timesync
+    - com_redhat_timesync
 ```
