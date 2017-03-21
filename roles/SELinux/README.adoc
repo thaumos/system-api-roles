@@ -11,28 +11,19 @@ Essentially provide mechanisms to manage local customizations:
 * Manage logins
 * Manage ports
 
-== Available modules ==
+== Available modules in Ansible ==
 
-=== Core modules ===
-
-https://github.com/ansible/ansible-modules-core
-
-selinux::
+selinux:: http://docs.ansible.com/ansible/selinux_module.html
 Configures the SELinux mode and policy.
 
-seboolean::
+seboolean:: http://docs.ansible.com/ansible/seboolean_module.html
 Toggles SELinux booleans.
 
-
-=== Extras modules ===
-
-https://github.com/ansible/ansible-modules-extras
-
-sefcontext::
+sefcontext:: http://docs.ansible.com/ansible/sefcontext_module.html
 Manages SELinux file context mapping definitions Similar to the `semanage fcontext` command.
 Currently it doesn't work due to https://bugzilla.redhat.com/show_bug.cgi?id=1405110
 
-seport::
+seport:: http://docs.ansible.com/ansible/seport_module.html
 Manages SELinux network port type definitions.
 
 === Modules provided by this repository ===
