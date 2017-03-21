@@ -26,7 +26,7 @@
   register: recommend
 
 - set_fact:
-    tuned_recommended_profile: "{{ (recommend.stdout == ' *fail') | ternary('',recommend.stdout) }}"
+    tuned_recommended_profile: "{{ (recommend.stdout == ' *fail') | ternary('default',recommend.stdout) }}"
 
 - name: Set Tuned legacy profile {{ tuned_legacy_profiles_map.get(config.profile, config.profile) }}
   command: tuned-adm profile {{ tuned_legacy_profiles_map.get(config.profile, config.profile) }}
@@ -38,4 +38,4 @@
 
 - name: Set recommended Tuned profile {{ tuned_recommended_profile }}
   command: tuned-adm profile {{ tuned_recommended_profile }}
-  when: not tuned_legacy and config.use_recommended_profile
+  when: config.use_recommended_profile
