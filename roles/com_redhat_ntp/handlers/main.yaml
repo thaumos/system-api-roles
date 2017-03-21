@@ -1,4 +1,0 @@
----
-
-- name: restart chrony
-  service: name=chronyd state=restarted
