@@ -14,3 +14,8 @@
   template: src=kdump.conf.j2 dest=/etc/kdump.conf
   when: kexec_crash_size.stdout|int > 0
   notify: restart kdump
+
+- name: Generate /etc/sysconfig/kdump
+  template: src=kdump.j2 dest=/etc/sysconfig/kdump
+  when: kexec_crash_size.stdout|int > 0
+  notify: restart kdump
