@@ -1,4 +1,5 @@
 # {{ ansible_managed }}
+# Last modified: {{ ansible_date_time.date }} {{ ansible_date_time.time }}
 
 {% if config.dump_target %}
 {{config.dump_target.kind}} {{config.dump_target.location}}
