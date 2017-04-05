@@ -26,7 +26,7 @@ check:
 		   --volume $(shell pwd):/system-api-test \
 		   --volume $(CACHEDIR):/cache \
 		   cockpit/system-api-test \
-		   avocado run test/test-*.py -m test/images.yaml --show-job-log
+		   avocado run test/test.py -m image:test/images.yml role:test/roles.yml --show-job-log
 
 check-local:
-	avocado run test/test-*.py --show-job-log
+	avocado run test/test.py -m role:test/roles.yml --show-job-log

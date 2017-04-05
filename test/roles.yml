@@ -1,0 +1,7 @@
+!mux
+tuned:
+  name: com_redhat_tuned
+ntp:
+  name: com_redhat_ntp
+kdump:
+  name: com_redhat_kdump

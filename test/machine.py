@@ -8,7 +8,6 @@ import time
 import avocado
 from avocado.utils import process
 import yaml
-import tempfile
 import logging
 
 
@@ -40,21 +39,9 @@ class Machine(object):
         with open(self.inventory_file, 'w') as f:
             f.write(host)
 
-    def set_config(self, interface, **config):
-        play = {
-                'hosts': 'system-api-test',
-                'become': True,
-                'roles': [ dict(role=interface.replace('.', '_'), **config) ]
-        }
-        playbook = [ play ]
-
-        playbook_file = os.path.join(self.workdir, 'test.yml')
-        with open(playbook_file, 'w') as f:
-            f.write(yaml.dump(playbook))
-
+    def run_playbook(self, filename):
         env = dict(ANSIBLE_ROLES_PATH=self.rolesdir, **os.environ)
-
-        run(['ansible-playbook', '-vvv', '-i', self.inventory_file, playbook_file], env=env)
+        run(['ansible-playbook', '-vvv', '--become', '-i', self.inventory_file, filename], env=env)
 
 
 class Virtualhost(Machine):
@@ -158,42 +145,3 @@ class Localhost(Machine):
     @staticmethod
     def execute(command, timeout=None, log_error=False):
         return run(command, timeout=timeout, log_error=log_error)
-
-
-class Test(avocado.Test):
-    """
-    Base class for integration tests.
-
-    Subclasses must include `:avocado: enable` in their docstring.
-    """
-
-    def setUp(self):
-        workdir = tempfile.mkdtemp(dir=self.workdir)
-        rolesdir = os.path.join(self.basedir, '..', 'roles')
-        if self.params.get('source'):
-            self.setUpMux(workdir, rolesdir)
-        else:
-            self.setUpLocal(workdir, rolesdir)
-
-    def tearDown(self):
-        if self.params.get('source'):
-            self.tearDownMux()
-        else:
-            self.tearDownLocal()
-
-    def setUpMux(self, workdir, rolesdir):
-        image = self.fetch_asset(self.params.get('source'))
-        self.machine = Virtualhost(image, workdir=workdir, rolesdir=rolesdir)
-
-        setup = self.params.get('setup')
-        if setup:
-            self.machine.execute(setup)
-
-    def tearDownMux(self):
-        self.machine.terminate()
-
-    def setUpLocal(self, workdir, rolesdir):
-        self.machine = Localhost(workdir, rolesdir)
-
-    def tearDownLocal(self):
-        pass
