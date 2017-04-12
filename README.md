@@ -50,7 +50,7 @@ This module and role has not yet been merged into this repository and can instea
 This role is explained in this [roles/postfix/README.md](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/postfix/README.md) which includes an example playbook.
 
 ### SELinux
-This role is explained in [roles/SELinux/README.adoc](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/README.adoc) and demonstrated in [example-SELinux.yml](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/example-playbook.yml) playbook.
+This role is explained in [roles/selinux/README.adoc](roles/selinux/README.adoc) and demonstrated in [selinux-playbook.yml](roles/selinux/selinux-playbook.yml) playbook.
 
 ### Storage
 Example playbook [roles/storage/example-playbook.yml](https://github.com/cockpit-project/poc-sysmgmt-roles/blob/master/roles/storage/example-playbook.yml) is provided which demonstrates basic storage configuration using the existing roles & modules already provided by Ansible.

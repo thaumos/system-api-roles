@@ -19,4 +19,4 @@
       - { login: '__default__', seuser: 'staff_u', serange: 's0-s0:c0.c1023', state: 'present' }
 
   roles:
-    - SELinux
+    - selinux

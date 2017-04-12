@@ -1,5 +1,7 @@
 = SELinux =
 
+`role: selinux`
+
 == Expected functionality ==
 
 Essentially provide mechanisms to manage local customizations:
@@ -37,10 +39,10 @@ Manages linux user to SELinux user mapping
 vars:
   ...
 roles:
-  - SELinux
+  - role: selinux
 ----
 
-=== SELinux role ===
+=== selinux role ===
 
 This role can be configured using variables as it is described bellow.
 
