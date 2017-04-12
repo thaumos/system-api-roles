@@ -25,15 +25,14 @@
     persistent: "{{ item.persistent | default('no') }}"
   with_items: " {{ SELinux_booleans | default([]) }}"
 
-# FIXME: Currently it doesn't work due https://bugzilla.redhat.com/show_bug.cgi?id=1405110
-# - name: Set SELinux file contexts
-#   sefcontext:
-#     target: "{{ item.target }}"
-#     setype: "{{ item.setype }}"
-#     ftype:  "{{ item.ftype | default('a') }}"
-#     state:  'present'
-#     # FIXME: selevel, seuser
-#   with_items: "{{ SELinux_file_contexts | default([]) }}"
+- name: Set SELinux file contexts
+  sefcontext:
+    target: "{{ item.target }}"
+    setype: "{{ item.setype }}"
+    ftype:  "{{ item.ftype | default('a') }}"
+    state:  'present'
+    # FIXME: selevel, seuser
+  with_items: "{{ SELinux_file_contexts | default([]) }}"
 
 - name: Restore SELinux labels on filesystem tree
   command: /sbin/restorecon -R {{ item }}
