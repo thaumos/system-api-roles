@@ -1,7 +1,4 @@
 ---
-- name: Check if SELinux is enabled
-  command: /usr/sbin/selinuxenabled
-
 - name: Install SELinux tools
   package:
     name:
