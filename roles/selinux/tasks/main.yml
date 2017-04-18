@@ -7,6 +7,9 @@
       - policycoreutils-python
     state: present
 
+- name: Drop all local modifications first
+  shell: echo "{{drop_local_modifications}}" | semanage -i -
+
 - name: Set permanent SELinux mode
   selinux: policy={{ SELinux_type }} state={{ SELinux_mode }}
   when: SELinux_mode is defined
