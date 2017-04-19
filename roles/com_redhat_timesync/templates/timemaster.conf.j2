@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-{% for value in conf.ptp_domains %}
+{% for value in ptp_domains %}
 [ptp_domain {{ value['number'] }}]
 interfaces {{ value['interfaces']|join(' ') }}
 {% if value['delay'] >= 0.0 %}

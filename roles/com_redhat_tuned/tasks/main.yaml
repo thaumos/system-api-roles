@@ -1,8 +1,4 @@
 ---
-- name: Gather config
-  action: system-api interface=com.redhat.tuned.preview
-  register: config
-
 - name: Install Tuned
   package: name=tuned state=present
 
@@ -28,14 +24,14 @@
 - set_fact:
     tuned_recommended_profile: "{{ (recommend.stdout == ' *fail') | ternary('default',recommend.stdout) }}"
 
-- name: Set Tuned legacy profile {{ tuned_legacy_profiles_map.get(config.profile, config.profile) }}
-  command: tuned-adm profile {{ tuned_legacy_profiles_map.get(config.profile, config.profile) }}
-  when: tuned_legacy and tuned_legacy_profiles_map.get(config.profile, config.profile) != ''
+- name: Set Tuned legacy profile {{ tuned_legacy_profiles_map.get(profile, profile) }}
+  command: tuned-adm profile {{ tuned_legacy_profiles_map.get(profile, profile) }}
+  when: tuned_legacy and tuned_legacy_profiles_map.get(profile, profile) != ''
 
-- name: Set Tuned profile {{ config.profile }}
-  command: tuned-adm profile {{ config.profile }}
-  when: not tuned_legacy and not config.use_recommended_profile and config.profile != ""
+- name: Set Tuned profile {{ profile }}
+  command: tuned-adm profile {{ profile }}
+  when: not tuned_legacy and not use_recommended_profile and profile != ""
 
 - name: Set recommended Tuned profile {{ tuned_recommended_profile }}
   command: tuned-adm profile {{ tuned_recommended_profile }}
-  when: config.use_recommended_profile
+  when: use_recommended_profile

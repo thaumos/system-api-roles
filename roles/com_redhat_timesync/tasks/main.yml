@@ -1,17 +1,14 @@
 ---
-- name: Gather config
-  action: system-api interface=com.redhat.timesync.preview
-  register: conf
 
 - name: Check if only NTP is needed
   set_fact:
     sync_mode: 1
-  when: conf.ptp_domains|length == 0
+  when: ptp_domains|length == 0
 
 - name: Check if single PTP is needed
   set_fact:
     sync_mode: 2
-  when: sync_mode is not defined and (conf.ntp_servers|length == 0) and conf.ptp_domains|length == 1 and conf.ptp_domains[0].interfaces|length == 1
+  when: sync_mode is not defined and (ntp_servers|length == 0) and ptp_domains|length == 1 and ptp_domains[0].interfaces|length == 1
 
 - name: Check if both NTP and PTP are needed
   set_fact:
@@ -36,7 +33,7 @@
   when: sync_mode != 1
 
 - name: Run phc_ctl on PTP interface
-  command: phc_ctl -q {{ conf.ptp_domains[0].interfaces[0] }}
+  command: phc_ctl -q {{ ptp_domains[0].interfaces[0] }}
   register: phc_ctl_output
   when: sync_mode == 2
   ignore_errors: yes
@@ -107,7 +104,7 @@
     mode: 0644
     regexp: '^PEERNTP='
     line: 'PEERNTP=no'
-    state: "{{ 'absent' if conf.dhcp_ntp_servers else 'present' }}"
+    state: "{{ 'absent' if dhcp_ntp_servers else 'present' }}"
   notify: restart {{ ntp_implementation + 'd' }}
   when: sync_mode == 1
 

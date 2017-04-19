@@ -1,8 +1,4 @@
 ---
-- name: Gather config
-  action: system-api interface=com.redhat.kdump.preview
-  register: config
-
 - name: Install kexec-tools
   package: name=kexec-tools state=present
 
