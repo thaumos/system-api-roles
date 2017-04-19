@@ -25,7 +25,8 @@ check:
 		   --rm \
 		   --volume $(shell pwd):/system-api-test \
 		   --volume $(CACHEDIR):/cache \
-		   cockpit/system-api-test
+		   cockpit/system-api-test \
+		   avocado run test/test-*.py -m test/images.yaml --show-job-log
 
 check-local:
 	avocado run test/test-*.py --show-job-log

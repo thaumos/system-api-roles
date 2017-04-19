@@ -18,4 +18,3 @@ USER tester
 RUN mkdir -p /home/tester/avocado/data/cache
 
 WORKDIR /system-api-test
-CMD avocado run test/test-*.py -m test/images.yaml --show-job-log
