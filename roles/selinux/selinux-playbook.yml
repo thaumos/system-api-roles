@@ -1,6 +1,8 @@
 ---
 - hosts: all
-  remote_user: root
+  become: true
+  become_method: sudo
+  become_user: root
   vars:
     SELinux_type: targeted
     SELinux_mode: enforcing
