@@ -17,8 +17,18 @@
     SELinux_ports:
       - { ports: '22100', proto: 'tcp', setype: 'ssh_port_t', state: 'present' }
     SELinux_logins:
-      - { login: 'plautrba', seuser: 'staff_u', state: 'absent' }
-      - { login: '__default__', seuser: 'staff_u', serange: 's0-s0:c0.c1023', state: 'present' }
+      - { login: 'sar-user', seuser: 'staff_u', serange: 's0-s0:c0.c1023', state: 'present' }
+
+  # prepare prerequisites which is used in this playbook
+  pre_tasks:
+    - name: Creates directory
+      file:
+        path: /tmp/test_dir
+        state: directory
+    - name: Add a System Api Roles SELinux User
+      user:
+        comment: System Api Roles SELinux User
+        name: sar-user
 
   roles:
     - selinux
