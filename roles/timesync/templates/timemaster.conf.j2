@@ -3,13 +3,13 @@
 {% for value in ptp_domains %}
 [ptp_domain {{ value['number'] }}]
 interfaces {{ value['interfaces']|join(' ') }}
-{% if value['delay'] >= 0.0 %}
+{% if 'delay' in value %}
 delay {{ value['delay'] }}
 {% endif %}
-{% if value['transport'] %}
+{% if 'transport' in value %}
 ptp4l_option network_transport {{ value['transport'] }}
 {% endif %}
-{% if value['udp_ttl'] > 1 %}
+{% if 'udp_ttl' in value %}
 ptp4l_option udp_ttl {{ value['udp_ttl'] }}
 {% endif %}
 
