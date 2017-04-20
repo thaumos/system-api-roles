@@ -35,17 +35,21 @@ Manages linux user to SELinux user mapping
 
 == Usage ==
 
+The general usage is demonstrated in link:selinux-playbook.yml[selinux-playbook.yml] playbook.
+
+=== selinux role ===
+
+This role can be configured using variables as it is described bellow.
+
 ----
+---
 vars:
-  ...
+  [ see bellow ]
 roles:
   - role: selinux
     become: true
 ----
 
-=== selinux role ===
-
-This role can be configured using variables as it is described bellow.
 
 ==== set SELinux mode permanently and in running system ====
 
