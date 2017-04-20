@@ -4,7 +4,7 @@
   become: true
 
   roles:
-    - role: com_redhat_ntp
+    - role: timesync
       ntp_servers:
         - hostname: "foo.example.com"
           pool: true
@@ -18,8 +18,8 @@
           maxpoll: 6
           iburst: false
 
-    - role: com_redhat_tuned
+    - role: tuned
       profile: "powersave"
 
-    - com_redhat_kdump
+    - kdump
 

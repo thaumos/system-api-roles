@@ -1,7 +1,7 @@
 !mux
 tuned:
-  name: com_redhat_tuned
+  name: tuned
 ntp:
-  name: com_redhat_ntp
+  name: ntp
 kdump:
-  name: com_redhat_kdump
+  name: kdump

@@ -3,7 +3,7 @@
   hosts: all
 
   roles:
-    - com_redhat_tuned
+    - tuned
 
   tasks:
     - name: Get tuned version

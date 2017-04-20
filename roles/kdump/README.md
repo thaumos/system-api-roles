@@ -1,7 +1,7 @@
 
 # Ansible Role: Kernel Crash Dump
 
-An ansible role which configures kdump. It implements the `com.redhat.kdump` API.
+An ansible role which configures kdump.
 
 ## Role Variables
 

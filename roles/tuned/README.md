@@ -1,7 +1,7 @@
 
 # Ansible Role: tuned
 
-An ansible role which configures tuned. It implements the `com.redhat.tuned` API.
+An ansible role which configures tuned.
 
 ## Role Variables
 

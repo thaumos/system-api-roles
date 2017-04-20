@@ -1,5 +1,5 @@
-com_redhat_timesync
-===================
+timesync
+========
 
 This role installs and configures an NTP and/or PTP implementation to operate
 as an NTP client and/or PTP slave in order to synchronize the system clock with
@@ -64,7 +64,7 @@ Install and configure ntp to synchronize the system clock with three NTP servers
       - hostname: baz.example.com
         iburst: yes
   roles:
-    - com_redhat_timesync
+    - timesync
 ```
 
 Install and configure linuxptp to synchronize the system clock with a
@@ -77,7 +77,7 @@ grandmaster in PTP domain number 0, which is accessible on interface eth0:
       - number: 0
         interfaces: [ eth0 ]
   roles:
-    - com_redhat_timesync
+    - timesync
 ```
 
 Install and configure chrony and linuxptp to synchronize the system clock with
@@ -104,5 +104,5 @@ synchronization:
         transport: UDPv4
         delay: 0.000010
   roles:
-    - com_redhat_timesync
+    - timesync
 ```
