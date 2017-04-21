@@ -35,6 +35,7 @@
 - name: Run phc_ctl on PTP interface
   command: phc_ctl -q {{ ptp_domains[0].interfaces[0] }}
   register: phc_ctl_output
+  changed_when: False
   when: sync_mode == 2
   ignore_errors: yes
 
@@ -48,6 +49,7 @@
   args:
     warn: no
   register: chrony_version
+  changed_when: False
   when: sync_mode != 2 and ntp_implementation == 'chrony'
 
 - name: Get ntp version
@@ -55,6 +57,7 @@
   args:
     warn: no
   register: ntp_version
+  changed_when: False
   when: sync_mode != 2 and ntp_implementation == 'ntp'
 
 - name: Generate chrony.conf file
